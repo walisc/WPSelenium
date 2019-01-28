@@ -1,0 +1,20 @@
+{
+    "name": "devchido/wpoow_test_plugin",
+    "authors": [
+        {
+            "name": "Chido",
+            "email": "chido@batanasoftware.com"
+        }
+    ],
+    "require":  {
+        "wpselenium": "@dev",
+        "phpunit/phpunit": "7.4.5",
+        "facebook/webdriver": "^1.0"
+    },    
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../WPSelenium"
+        }
+    ]
+}
