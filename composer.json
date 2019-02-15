@@ -17,10 +17,9 @@
     }, 
     "autoload": {
         "psr-4": {
-            "WPSelenium\\": "src/",
+            "WPSelenium\\": "src/"
         }
     },
-
     "bin": ["wpselenium"]
 
 }

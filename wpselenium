@@ -1,9 +1,23 @@
+#!/usr/bin/env php
+
 <?php
 
-echo "--- WPooW Tests Runner --- \n";
+include_once sprintf("%s%s%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
+use WPSelenium\WPSeleniumConfig;
 
-$testSite = "";
-$project_dir = realpath(sprintf("%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "../"));
+echo "--- WPooW Tests Runner --- \n";
+$wpseleniumConfigFile = sprintf("%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "wpselenium.xml");
+
+if (!file_exists($wpseleniumConfigFile)){
+    Logger::ERROR(sprintf("wpselenium.xml config not found. Please ensure that the file existes in the root of your project. Looking in %s", getcwd()));
+    Quit();
+}
+
+(new WPSeleniumConfig($wpseleniumConfigFile));
+
+$testSite = WPSeleniumConfig::Get()->GetSiteURL();
+$project_dir = getcwd();
+
 $phpunitloc = sprintf("%s%s%s%s%s%s%s", $project_dir, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
 $binPath = sprintf("%s%s%s",__DIR__, DIRECTORY_SEPARATOR, "bin");
 $driverPath = sprintf("%s%s%s", $binPath, DIRECTORY_SEPARATOR, "chromeDrivers.zip");
