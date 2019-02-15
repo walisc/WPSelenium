@@ -1,5 +1,7 @@
 <?php
 
+namespace WPSelenium\Utilities;
+
 class Requests{
     static function GetFile($url, $filePath){
 
