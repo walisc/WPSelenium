@@ -1,5 +1,5 @@
 {
-    "name": "devchido/wpselenium_test_plugin",
+    "name": "devchid/wpselenium_test_plugin",
     "authors": [
         {
             "name": "Chido",
@@ -7,7 +7,7 @@
         }
     ],
     "require":  {
-        "wpselenium": "@dev",
+        "devchid/wpselenium": "@dev",
         "phpunit/phpunit": "7.4.5",
         "facebook/webdriver": "^1.0"
     },    

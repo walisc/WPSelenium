@@ -25,7 +25,7 @@ function wpselenium_testing_request(){
     
     echo json_encode([
         "pluginPathDir" => __DIR__,
-        "WPooWLinked" => $wpselenium_linked 
+        "WPSeleniumLinked" => $wpselenium_linked 
     ]);
 
 }

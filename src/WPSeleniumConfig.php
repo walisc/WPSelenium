@@ -6,12 +6,14 @@ use WPSelenium\Utilities\Logger;
 class WPSeleniumConfig{
 
     private $parsedConfig;
+    private $wpSeleniumPathDir;
     private static $instance = null;
 
 
-    function __construct($filePath)
+    function __construct($configFilePathilePath, $wpSeleniumPathDir)
     {
-        $this->parsedConfig=simplexml_load_file($filePath);
+        $this->wpSeleniumPathDir = $wpSeleniumPathDir;
+        $this->parsedConfig=simplexml_load_file($configFilePathilePath);
 
         if ($this->parsedConfig === false){
             Logger::ERROR("Failed parsing the wpselenium xml file. Please make use it is in the correct format ");
@@ -48,5 +50,9 @@ class WPSeleniumConfig{
 
     public function GetPhpUnitConfig(){
 
+    }
+
+    public function GetWPSeleniumDir(){
+        return $this->wpSeleniumPathDir;
     }
 }

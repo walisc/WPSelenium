@@ -20,6 +20,7 @@ class ProvisionTestPlugin{
         $ds = DIRECTORY_SEPARATOR;
         $this->sitePath = WPSeleniumConfig::Get()->GetSitePath();
         $this->siteUrl = WPSeleniumConfig::Get()->GetSiteUrl();
+        $this->wpSeleniumPathDir = WPSeleniumConfig::Get()->GetWPSeleniumDir();
         $this->wpSeleniumPluginPath = sprintf("%s{$ds}TestPlugin", __DIR__);
         $this->wpSeleniumPluginInstallPath = "{$this->sitePath}{$ds}wp-content{$ds}plugins{$ds}WPSeleniumTestPlugin";
 
@@ -29,23 +30,23 @@ class ProvisionTestPlugin{
     }
 
     function LinkToPlugin(){
-        $result = Requests::Post(sprintf('http://%s/wp-admin/admin-ajax.php', $this->siteUrl),  "action=wpoow_testing_request");
+        $result = Requests::Post(sprintf('http://%s/wp-admin/admin-ajax.php', $this->siteUrl),  "action=wpselenium_testing_request");
         $resultDic = json_decode(substr($result,0,strlen($result)-1), true);
-    
-        if (!$resultDic["WPooWLinked"]){
+
+        if (!$resultDic["WPSeleniumLinked"]){
             if ($resultDic["pluginPathDir"]){
-                Logger::INFO("WPooW project not linked to WPooW test Plugin. Linking now");
+                Logger::INFO("WPSelenium not linked to your site. Linking now");
                 $testPluginPath =sprintf("%s%s",$resultDic["pluginPathDir"], DIRECTORY_SEPARATOR);
                 $testPluginDetails = json_decode(file_get_contents($testPluginPath. "composer.sample.json"), true);
-                $testPluginDetails["repositories"][0]["url"] = realpath(sprintf("%s%s%s",__DIR__, DIRECTORY_SEPARATOR, "../"));
+                $testPluginDetails["repositories"][0]["url"] = realpath($this->wpSeleniumPathDir);
     
                 fwrite(fopen($testPluginPath."composer.json", "w") , json_encode($testPluginDetails));
                 echo "\n";
                 exec("composer install -d ". $resultDic["pluginPathDir"]);
-                Logger::INFO("WPooW project linked successfully");
+                Logger::INFO("WPSelenium linked to site successfully");
             }
             else{
-                Logger::ERROR("Cant seem to be able to communicate WPooW Test Plugin. Make sure your site is running and you have add and activated it the WPooW test Plugin.");
+                Logger::ERROR("Cant seem to be able to communicate WPSelenium Test Plugin. Make sure your site is running and you have added and activated it the WPSelenium Test Plugin.");
                 Quit();
             }
         }
