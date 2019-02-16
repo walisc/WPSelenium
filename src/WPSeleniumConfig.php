@@ -7,17 +7,30 @@ class WPSeleniumConfig{
 
     private $parsedConfig;
     private $wpSeleniumPathDir;
+    private $wpSeleniumProvisionConfig;
     private static $instance = null;
 
 
-    function __construct($configFilePathilePath, $wpSeleniumPathDir)
+    function __construct($configFilePathilePath, $wpSeleniumPathDir, $argc, $argv)
     {
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
+        $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
 
         if ($this->parsedConfig === false){
-            Logger::ERROR("Failed parsing the wpselenium xml file. Please make use it is in the correct format ");
+            Logger::ERROR("Failed parsing the wpselenium xml file. Please make use it is in the correct format ", true);
         }
+
+        if ($argc < 2)
+        {
+            Logger::ERROR(sprintf("Please specify the browser you want to test on. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())),true);
+        }
+        else{
+            if (!in_array($argv[1],  $this->wpSeleniumProvisionConfig->GetAvailableDrivers())){
+                Logger::ERROR(sprintf("The drivers for the browser you are trying to test for do not exist. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())),true);
+            }
+        }
+        
         self::$instance = $this; 
     }
 
@@ -54,5 +67,45 @@ class WPSeleniumConfig{
 
     public function GetWPSeleniumDir(){
         return $this->wpSeleniumPathDir;
+    }
+
+    public function GetWPSeleniumProvisionConfig(){
+        return $this->parsedConfig->wpSeleniumProvision;
+    }
+}
+
+class ProvisionSeleniumConfig{
+    
+    private $librarySeleniumProvisionConfig;
+    private $userSeleniumProvisionConfig;
+    private $availableDrivers;
+
+    function __construct($wpSeleniumConfig)
+    {
+        $this->librarySeleniumProvisionConfig = $this->parsedConfig=simplexml_load_file(sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "Provision", DIRECTORY_SEPARATOR, "wpseleniumprovision.xml"));    
+        $this->userSeleniumProvisionConfig =  $wpSeleniumConfig->wpSeleniumProvision;
+
+        if( $this->userSeleniumProvisionConfig->driverUrl){
+            $driversDetails = array_merge($this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}, $this->userSeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)});
+        }
+        else{
+            $driversDetails = $this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)};
+        }
+
+        
+        $this->availableDrivers = array_keys(get_object_vars($driversDetails));
+  
+    }
+
+    function GetAvailableDrivers(){
+        return $this->availableDrivers;
+    }
+
+    function GetSeleniumDownloadUrl(){ 
+
+    }
+
+    function GetDriverDownloadUrl(){
+
     }
 }

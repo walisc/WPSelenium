@@ -16,7 +16,7 @@ if (!file_exists($wpseleniumConfigFile)){
     Quit();
 }
 
-(new WPSeleniumConfig($wpseleniumConfigFile, __DIR__));
+(new WPSeleniumConfig($wpseleniumConfigFile, __DIR__, $argc, $argv));
 
 ProvisionTestPlugin::Provision();
 ProvisionSelenium::Provision();

@@ -1,0 +1,13 @@
+<wpSeleniumProvision>
+    <wpseleniumurl>http://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.1.jar</wpseleniumurl>
+    <driverUrl>
+        <win>
+            <chrome>https://chromedriver.storage.googleapis.com/2.45/chromedriver_win32.zip</chrome>
+            <firefox>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win64.zip</firefox>
+        </win>
+        <linux>
+            <chrome>https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip</chrome>
+            <firefox>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz</firefox>
+        </linux>
+    </driverUrl>
+</wpSeleniumProvision>
