@@ -22,6 +22,8 @@ ProvisionTestPlugin::Provision();
 ProvisionSelenium::Provision();
 RunTests();
 
+//not wordpress site
+//--re-provision
 $testSite = WPSeleniumConfig::Get()->GetSiteURL();
 $project_dir = getcwd();
 

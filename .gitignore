@@ -3,3 +3,4 @@ Build/
 vendor/
 composer.lock
 .vscode
+bin/

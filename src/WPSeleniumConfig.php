@@ -8,6 +8,7 @@ class WPSeleniumConfig{
     private $parsedConfig;
     private $wpSeleniumPathDir;
     private $wpSeleniumProvisionConfig;
+    private $selectedBrowserDriver;
     private static $instance = null;
 
 
@@ -23,11 +24,14 @@ class WPSeleniumConfig{
 
         if ($argc < 2)
         {
-            Logger::ERROR(sprintf("Please specify the browser you want to test on. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())),true);
+            Logger::ERROR(sprintf("Please specify the browser you want to test on. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())), true);
         }
         else{
             if (!in_array($argv[1],  $this->wpSeleniumProvisionConfig->GetAvailableDrivers())){
-                Logger::ERROR(sprintf("The drivers for the browser you are trying to test for do not exist. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())),true);
+                Logger::ERROR(sprintf("The drivers for the browser you are trying to test for do not exist. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())), true);
+            }
+            else{
+                $this->selectedBrowserDriver = $argv[1];
             }
         }
         
@@ -70,7 +74,11 @@ class WPSeleniumConfig{
     }
 
     public function GetWPSeleniumProvisionConfig(){
-        return $this->parsedConfig->wpSeleniumProvision;
+        return $this->wpSeleniumProvisionConfig;
+    }
+
+    public function GetBroswerDriver(){
+        return $this->selectedBrowserDriver;
     }
 }
 
@@ -84,7 +92,6 @@ class ProvisionSeleniumConfig{
     {
         $this->librarySeleniumProvisionConfig = $this->parsedConfig=simplexml_load_file(sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "Provision", DIRECTORY_SEPARATOR, "wpseleniumprovision.xml"));    
         $this->userSeleniumProvisionConfig =  $wpSeleniumConfig->wpSeleniumProvision;
-
         if( $this->userSeleniumProvisionConfig->driverUrl){
             $driversDetails = array_merge($this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}, $this->userSeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)});
         }
@@ -102,10 +109,24 @@ class ProvisionSeleniumConfig{
     }
 
     function GetSeleniumDownloadUrl(){ 
-
+        //TODO: Work on the user config
+        if( $this->userSeleniumProvisionConfig->wpSeleniumUrl){
+            return $this->userSeleniumProvisionConfig->wpSeleniumUrl;
+        }
+        else{
+            return $this->librarySeleniumProvisionConfig->wpSeleniumUrl;
+        }
     }
 
-    function GetDriverDownloadUrl(){
+    function GetDriverDownloadUrl($selectedBrowserDriver){
 
+        //TODO: Work on the user config
+        if( $this->userSeleniumProvisionConfig->driverUrl){
+            $driversDetails = array_merge($this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}, $this->userSeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)});
+        }
+        else{
+            return $this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}->{$selectedBrowserDriver};
+        }
+       
     }
 }
