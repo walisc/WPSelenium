@@ -9,8 +9,8 @@ class ProvisionSelenium{
 
     private $wpSeleniumPathDir;
     private $wpSeleniumBinPath;
-    private $seleniumServerDownloadPath; 
-    private $seleniumDriverDownloadPath; 
+    private $seleniumServerServerPath; 
+    private $seleniumCompressedDriverPath; 
     private $selectedBrowserDriver;
 
     private $wpSeleniumProvisionConfig;
@@ -26,12 +26,9 @@ class ProvisionSelenium{
         $this->wpSeleniumProvisionConfig = $wpSeleniumConfig->GetWPSeleniumProvisionConfig();
         $this->selectedBrowserDriver = $wpSeleniumConfig->GetBroswerDriver();
 
-        $this->wpSeleniumBinPath = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
-
-        $this->seleniumServerDownloadPath = sprintf("%s%s%s", $this->wpSeleniumBinPath , DIRECTORY_SEPARATOR, "seleniumServer.jar");
-        $this->seleniumDriverDownloadPath = sprintf("%s%s%s", $this->wpSeleniumBinPath , DIRECTORY_SEPARATOR, sprintf("%sDriverCompressed",  $this->selectedBrowserDriver ));
-
-        
+        $this->wpSeleniumBinPath = $wpSeleniumConfig->GetBinDirectory();
+        $this->seleniumServerServerPath =  $wpSeleniumConfig->GetSeleniumServerPath();
+        $this->seleniumCompressedDriverPath =  $wpSeleniumConfig->GetSeleniumCompressedDriverPath();
 
         if (!file_exists($this->wpSeleniumBinPath))
         {
@@ -39,29 +36,30 @@ class ProvisionSelenium{
         }
         $this->DownloadSelenium();
         $this->DownloadSeleniumDrivers();
+        chmod_R($this->wpSeleniumBinPath, 0755);
     }
 
     function DownloadSelenium(){
-        if (!file_exists($this->seleniumServerDownloadPath )){
+        if (!file_exists($this->seleniumServerServerPath )){
             Logger::INFO("Selenium Server is not installed. Installing now");
-            Requests::GetFile($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), fopen($this->seleniumServerDownloadPath, "w+"));
+            Requests::GetFile($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), fopen($this->seleniumServerServerPath, "w+"));
         }
     }
 
     function DownloadSeleniumDrivers(){
-        if (!file_exists($this->seleniumDriverDownloadPath)){
+        if (!file_exists($this->seleniumCompressedDriverPath)){
             Logger::INFO("Installing Selenium {$this->selectedBrowserDriver} drivers");
             
-            Requests::GetFile($this->wpSeleniumProvisionConfig->GetDriverDownloadUrl($this->selectedBrowserDriver), fopen($this->seleniumDriverDownloadPath, "w+") );
+            Requests::GetFile($this->wpSeleniumProvisionConfig->GetDriverDownloadUrl($this->selectedBrowserDriver), fopen($this->seleniumCompressedDriverPath, "w+") );
             
             $zip = new \ZipArchive;
-            $res = $zip->open($this->seleniumDriverDownloadPath);
+            $res = $zip->open($this->seleniumCompressedDriverPath);
             $zip->extractTo($this->wpSeleniumBinPath);
             $zip->close();
     
             
         }
-    }
+    } 
 }
 
 
@@ -108,3 +106,30 @@ function InstallSeleniumDependencies(){
         
     }
 }
+
+// From http://php.net/manual/en/function.chmod.php#84273
+function chmod_R($path, $filemode) { 
+    if (!is_dir($path)) 
+        return chmod($path, $filemode); 
+
+    $dh = opendir($path); 
+    while (($file = readdir($dh)) !== false) { 
+        if($file != '.' && $file != '..') { 
+            $fullpath = $path.'/'.$file; 
+            if(is_link($fullpath)) 
+                return FALSE; 
+            elseif(!is_dir($fullpath)) 
+                if (!chmod($fullpath, $filemode)) 
+                    return FALSE; 
+            elseif(!chmod_R($fullpath, $filemode)) 
+                return FALSE; 
+        } 
+    } 
+
+    closedir($dh); 
+
+    if(chmod($path, $filemode)) 
+        return TRUE; 
+    else 
+        return FALSE; 
+} 

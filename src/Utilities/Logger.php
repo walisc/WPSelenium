@@ -10,7 +10,7 @@ Class Logger{
     static function WARN($msg){
         echo sprintf("\n\033[33m %s WARN:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
     }
-    static function ERROR($msg, $shouldExit){
+    static function ERROR($msg, $shouldExit=false){
         echo sprintf("\n\033[31m %s ERROR:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg);     
         Quit ($shouldExit);
     }

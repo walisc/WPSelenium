@@ -9,13 +9,17 @@ class WPSeleniumConfig{
     private $wpSeleniumPathDir;
     private $wpSeleniumProvisionConfig;
     private $selectedBrowserDriver;
+    private $binDirectory;
     private static $instance = null;
 
 
     function __construct($configFilePathilePath, $wpSeleniumPathDir, $argc, $argv)
     {
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
+        $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
+
+
         $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
 
         if ($this->parsedConfig === false){
@@ -80,6 +84,17 @@ class WPSeleniumConfig{
     public function GetBroswerDriver(){
         return $this->selectedBrowserDriver;
     }
+
+    public function GetBinDirectory(){
+        return $this->binDirectory;
+    }
+
+    public function GetSeleniumServerPath(){
+        return sprintf("%s%s%s", $this->binDirectory , DIRECTORY_SEPARATOR, "seleniumServer.jar");
+    }
+    public function GetSeleniumCompressedDriverPath(){
+        return  sprintf("%s%s%s", $this->binDirectory , DIRECTORY_SEPARATOR, sprintf("%sDriverCompressed",  $this->selectedBrowserDriver ));
+    }
 }
 
 class ProvisionSeleniumConfig{
@@ -99,7 +114,7 @@ class ProvisionSeleniumConfig{
             $driversDetails = $this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)};
         }
 
-        
+        //TODO: merge array
         $this->availableDrivers = array_keys(get_object_vars($driversDetails));
   
     }
