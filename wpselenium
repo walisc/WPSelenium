@@ -2,6 +2,8 @@
 
 <?php
 
+error_reporting(E_ERROR  | E_PARSE );
+
 include_once sprintf("%s%s%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
 use WPSelenium\WPSeleniumConfig;
 use WPSelenium\Utilities\Logger;

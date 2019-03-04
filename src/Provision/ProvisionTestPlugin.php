@@ -46,8 +46,7 @@ class ProvisionTestPlugin{
                 Logger::INFO("WPSelenium linked to site successfully");
             }
             else{
-                Logger::ERROR("Cant seem to be able to communicate WPSelenium Test Plugin. Make sure your site is running and you have added and activated it the WPSelenium Test Plugin.");
-                Quit();
+                Logger::ERROR("Cant seem to be able to communicate WPSelenium Test Plugin. Make sure your site is running and you have added and activated it the WPSelenium Test Plugin.", true);
             }
         }
     

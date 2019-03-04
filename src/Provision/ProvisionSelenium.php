@@ -47,10 +47,14 @@ class ProvisionSelenium{
     }
 
     function DownloadSeleniumDrivers(){
-        if (!file_exists($this->seleniumCompressedDriverPath)){
+        $driverUrl = $this->wpSeleniumProvisionConfig->GetDriverDownloadUrl($this->selectedBrowserDriver);
+        $fileExtension = pathinfo($driverUrl, PATHINFO_EXTENSION ); //NOTE:- File extension does not recognize tar.gz. Still work fine however
+        $saveDriverPath = "$this->seleniumCompressedDriverPath.$fileExtension";
+
+        if (!file_exists($saveDriverPath)){
             Logger::INFO("Installing Selenium {$this->selectedBrowserDriver} drivers");
             
-            Requests::GetFile($this->wpSeleniumProvisionConfig->GetDriverDownloadUrl($this->selectedBrowserDriver), fopen($this->seleniumCompressedDriverPath, "w+") );
+            Requests::GetFile($driverUrl, fopen($saveDriverPath, "w+") );
             
             $zip = new \ZipArchive;
             $res = $zip->open($this->seleniumCompressedDriverPath);

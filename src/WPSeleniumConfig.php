@@ -12,6 +12,7 @@ class WPSeleniumConfig{
     private $binDirectory;
     private $phpUnitPath;
     private $phpUnitConfigPath;
+    private $testFiles;
     private static $instance = null;
 
 
@@ -22,7 +23,7 @@ class WPSeleniumConfig{
         $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
         $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
-
+        $this->testFiles = $this->ParseTestDirectories(dirname($configFilePathilePath));
 
         $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
 
@@ -61,8 +62,49 @@ class WPSeleniumConfig{
         return $this->parsedConfig->sitePath;
     }
 
-    public function GetTestDirectory(){
-        return $this->parsedConfig->testDirectory;
+    public function GetTestFiles(){
+        return $this->testFiles;
+    }
+    public function ParseTestDirectories($workingDir=""){
+
+        $testDirectories = [];
+        $testFiles = [];
+
+        function GetTestsFiles($type, $testSuiteObj, &$testDirectories)  {
+            if (array_key_exists($type, $testSuiteObj)){
+                if (is_array($testSuiteObj[$type]))
+                {
+                    $testDirectories = array_merge($testDirectories, $testSuiteObj[$type]);
+                }
+                else{
+                    array_push($testDirectories,$testSuiteObj[$type] );
+                }
+            }   
+        }
+
+        $testSuites = get_object_vars( $this->parsedConfig->phpunit->testsuites)['testsuite'];
+        
+        if (is_array($testSuites))
+        {
+            foreach( $testSuites as $key => $value)
+            {
+                $testSuiteObj = get_object_vars($value);
+                GetTestsFiles('directory',$testSuiteObj, $testDirectories);
+                GetTestsFiles('file',$testSuiteObj, $testFiles);
+            }
+        }
+        
+        foreach($testDirectories as &$testDirectory){
+            $testDirectory = sprintf("%s%s%s", $workingDir, DIRECTORY_SEPARATOR, $testDirectory);
+        }
+        foreach($testFiles as &$testFile){
+            $testFile = sprintf("%s%s%s", $workingDir, DIRECTORY_SEPARATOR, $testFile);
+        }
+
+        return [
+            'directories' => $testDirectories,
+            'files' => $testFiles
+        ];
     }
 
     public function GetWPTestUsername(){

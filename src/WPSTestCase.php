@@ -8,24 +8,16 @@ use \Facebook\WebDriver\Remote\DesiredCapabilities;
 
 abstract class WPSTestCase extends TestCase{
 
-    abstract function BeforeRun();
+    function setUpWPSite(){}
 
     private static $seleniumDriver;
 
     protected function GetSeleniumDriver(){
         if (self::$seleniumDriver == null){
             $hosturl = "http://localhost:4444/wd/hub";
-            //TODO: Report bug. Unable to catch exception when this fails
-            switch($this->GetSelectedBrowser()){
-                case 'chrome':
-                    self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::chrome());
-                    break;
-                case 'firefox':
-                    self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::firefox());
-                    break;
-                    
+            //Note: Report bug. Unable to catch exception when this fails
+            self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::{getenv('WPSELENIUM_DRIVER')}());    
             }
-        }
         return self::$seleniumDriver;
     }
 
