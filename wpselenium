@@ -22,13 +22,3 @@ if (!file_exists($wpseleniumConfigFile)){
 ProvisionTestPlugin::Provision();
 ProvisionSelenium::Provision();
 TestRunner::RunTests();
-
-
-function StartWPooWTests(){
-    global $phpunitloc;
-    
-    Logger::INFO("---- Running WPooW Tests---- \n\n");
-    system($phpunitloc);
-    //Kill Selenium
-    //sleep 1
-}

@@ -10,6 +10,8 @@ class WPSeleniumConfig{
     private $wpSeleniumProvisionConfig;
     private $selectedBrowserDriver;
     private $binDirectory;
+    private $phpUnitPath;
+    private $phpUnitConfigPath;
     private static $instance = null;
 
 
@@ -17,6 +19,8 @@ class WPSeleniumConfig{
     {
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
+        $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
+        $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
 
 
@@ -70,7 +74,15 @@ class WPSeleniumConfig{
     }
 
     public function GetPhpUnitConfig(){
+        return $this->parsedConfig->phpunit;
+    }
 
+    public function GetPhpUnitConfigPath(){
+        return $this->phpUnitConfigPath;
+    }
+
+    public function GetPhpUnitPath(){
+        return $this->phpUnitPath;
     }
 
     public function GetWPSeleniumDir(){
