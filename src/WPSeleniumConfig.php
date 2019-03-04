@@ -2,6 +2,7 @@
 
 namespace WPSelenium;
 use WPSelenium\Utilities\Logger;
+use WPSelenium\Utilities\CONSTS;
 
 class WPSeleniumConfig{
 
@@ -102,8 +103,8 @@ class WPSeleniumConfig{
         }
 
         return [
-            'directories' => $testDirectories,
-            'files' => $testFiles
+            [CONSTS::WPSELENIUM_TEMP_TEST_DIR_KEY] => $testDirectories,
+            [CONSTS::WPSELENIUM_TEMP_TEST_FILE_KEY] => $testFiles
         ];
     }
 
