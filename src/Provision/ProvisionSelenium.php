@@ -48,18 +48,36 @@ class ProvisionSelenium{
 
     function DownloadSeleniumDrivers(){
         $driverUrl = $this->wpSeleniumProvisionConfig->GetDriverDownloadUrl($this->selectedBrowserDriver);
-        $fileExtension = pathinfo($driverUrl, PATHINFO_EXTENSION ); //NOTE:- File extension does not recognize tar.gz. Still work fine however
+        $driverUrlExploded = explode('.',$driverUrl);
+
+        if (count($driverUrlExploded)> 2 && $driverUrlExploded[count($driverUrlExploded)-1] == "gz" && $driverUrlExploded[count($driverUrlExploded)-2] == "tar" ){
+            $fileExtension = "tar.gz";
+        }
+        else{ 
+        $fileExtension = pathinfo($driverUrl, PATHINFO_EXTENSION ); //NOTE:- File extension does not recognize tar.gz. 
+        }
+
         $saveDriverPath = "$this->seleniumCompressedDriverPath.$fileExtension";
 
         if (!file_exists($saveDriverPath)){
             Logger::INFO("Installing Selenium {$this->selectedBrowserDriver} drivers");
-            
             Requests::GetFile($driverUrl, fopen($saveDriverPath, "w+") );
             
-            $zip = new \ZipArchive;
-            $res = $zip->open($this->seleniumCompressedDriverPath);
-            $zip->extractTo($this->wpSeleniumBinPath);
-            $zip->close();
+            switch($fileExtension){
+                case "zip":
+                    $zip = new \ZipArchive;
+                    $res = $zip->open($saveDriverPath);
+                    $zip->extractTo($this->wpSeleniumBinPath);
+                    $zip->close();
+                    break;
+                case "tar.gz":
+                    $p = new \PharData($saveDriverPath);
+                    $p->decompress(); 
+                    $phar = new \PharData(str_replace(".gz","",$saveDriverPath));
+                    $phar->extractTo($this->wpSeleniumBinPath);
+            }
+            
+            
     
             
         }

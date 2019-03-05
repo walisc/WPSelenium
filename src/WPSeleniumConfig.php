@@ -157,20 +157,35 @@ class ProvisionSeleniumConfig{
     private $librarySeleniumProvisionConfig;
     private $userSeleniumProvisionConfig;
     private $availableDrivers;
+    private $combinedSeleniumProvisionConfig;
+
+    private function ConvertToArray($xml){
+        $json = json_encode($xml);
+        return json_decode($json,TRUE);
+    }
+    
+    // From https://medium.com/@kcmueller/php-merging-two-multi-dimensional-arrays-overwriting-existing-values-8648d2a7ea4f
+    private function array_merge_recursive_distinct(array &$array1, array &$array2)
+    {
+        $merged = $array1;
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = $this->array_merge_recursive_distinct($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+        return $merged;
+    }
+
 
     function __construct($wpSeleniumConfig)
     {
-        $this->librarySeleniumProvisionConfig = $this->parsedConfig=simplexml_load_file(sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "Provision", DIRECTORY_SEPARATOR, "wpseleniumprovision.xml"));    
-        $this->userSeleniumProvisionConfig =  $wpSeleniumConfig->wpSeleniumProvision;
-        if( $this->userSeleniumProvisionConfig->driverUrl){
-            $driversDetails = array_merge($this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}, $this->userSeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)});
-        }
-        else{
-            $driversDetails = $this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)};
-        }
+        $this->librarySeleniumProvisionConfig = $this->ConvertToArray($this->parsedConfig=simplexml_load_file(sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "Provision", DIRECTORY_SEPARATOR, "wpseleniumprovision.xml")));    
+        $this->userSeleniumProvisionConfig =  $this->ConvertToArray($wpSeleniumConfig->wpSeleniumProvision);
 
-        //TODO: merge array
-        $this->availableDrivers = array_keys(get_object_vars($driversDetails));
+        $this->combinedSeleniumProvisionConfig = $this->array_merge_recursive_distinct($this->librarySeleniumProvisionConfig,$this->userSeleniumProvisionConfig);
+        $this->availableDrivers = array_keys($this->combinedSeleniumProvisionConfig['driverUrl'][strtolower(PHP_OS)]);
   
     }
 
@@ -179,24 +194,10 @@ class ProvisionSeleniumConfig{
     }
 
     function GetSeleniumDownloadUrl(){ 
-        //TODO: Work on the user config
-        if( $this->userSeleniumProvisionConfig->wpSeleniumUrl){
-            return $this->userSeleniumProvisionConfig->wpSeleniumUrl;
-        }
-        else{
-            return $this->librarySeleniumProvisionConfig->wpSeleniumUrl;
-        }
+        return $this->combinedSeleniumProvisionConfig['wpSeleniumUrl'];
     }
 
     function GetDriverDownloadUrl($selectedBrowserDriver){
-
-        //TODO: Work on the user config
-        if( $this->userSeleniumProvisionConfig->driverUrl){
-            $driversDetails = array_merge($this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}, $this->userSeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)});
-        }
-        else{
-            return $this->librarySeleniumProvisionConfig->driverUrl->{strtolower(PHP_OS)}->{$selectedBrowserDriver};
-        }
-       
+        return $this->combinedSeleniumProvisionConfig['driverUrl'][strtolower(PHP_OS)][$selectedBrowserDriver];
     }
 }
