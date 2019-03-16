@@ -54,15 +54,17 @@ class ProvisionTestPlugin{
 
     function CopyTestPlugin(){        
         if (file_exists($this->wpSeleniumPluginInstallPath)){
+            //TODO: Not returning
             return;
         }
         Logger::INFO("Copying WPSelenium Test Plugin to your site");
         recurse_copy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
+        //TODO: Check if sucess
 
         Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium test succefully. 
                       The plugin has not been activate however, for security reasons. Please login to your WordPress site and 
-                      activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.");
-        Quit();
+                      activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.", true);
+        
     }
 }
 
@@ -72,11 +74,11 @@ function recurse_copy($src,$dst) {
     @mkdir($dst); 
     while(false !== ( $file = readdir($dir)) ) { 
         if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . '/' . $file) ) { 
-                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            if ( is_dir($src . DIRECTORY_SEPARATOR . $file) ) { 
+                recurse_copy($src . DIRECTORY_SEPARATOR . $file,$dst . DIRECTORY_SEPARATOR . $file); 
             } 
             else { 
-                copy($src . '/' . $file,$dst . '/' . $file); 
+                copy($src .DIRECTORY_SEPARATOR . $file,$dst .DIRECTORY_SEPARATOR. $file); 
             } 
         } 
     } 
