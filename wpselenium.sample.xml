@@ -1,0 +1,42 @@
+<wpselenium>
+    <siteUrl>localhost/wpselenium</siteUrl>
+    <sitePath>/opt/lampp/htdocs/wpoow_2_0</sitePath>
+    <!-- Only requiured it you need to do test through wp-admin -->
+    <!-- Pass dont store production details here -->
+    <wpTestUsername>testuser</wpTestUsername>
+    <wpTestPassword>testuser</wpTestPassword>
+    <!--
+    WPSelenium will use the following settng when setting up selenium. If you want to use other versions of selenium, or drivers
+    commment out this part and update appropiately. Please note, the wpseleniumprovision config will be merged with the library one.
+    You don't have to repeat all the setting, only the ones you want to change.
+
+    <wpSeleniumProvision>
+        <wpSeleniumUrl>http://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.1.jar</wpSeleniumUrl>
+        <driverUrl>
+            <win>
+                <chrome>https://chromedriver.storage.googleapis.com/2.45/chromedriver_win32.zip</chrome>
+                <firefox>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-win64.zip</firefox>
+            </win>
+            <linux>
+                <chrome>https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip</chrome>
+                <firefox>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz</firefox>
+                <opera>https://github.com/operasoftware/operachromiumdriver/releases/download/v.2.42/operadriver_linux64.zip </opera>
+            </linux>
+        </driverUrl>
+    </wpSeleniumProvision>
+    
+    <wpSeleniumPort></wpSeleniumPort>
+    -->
+    
+    <phpunit bootstrap="vendor/autoload.php">
+        <testsuites>
+            <testsuite name="WPooW Tests">
+            <directory>tests</directory>
+            </testsuite>
+            <testsuite name="WPooW Tests2">
+                <file>tests</file>
+                <file>tests2</file>
+            </testsuite>
+        </testsuites>
+    </phpunit>
+</wpselenium>

@@ -3,6 +3,7 @@
 namespace WPSelenium;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\CONSTS;
+use WPSelenium\Utilities\Utilities;
 
 class WPSeleniumConfig{
 
@@ -150,6 +151,21 @@ class WPSeleniumConfig{
     public function GetSeleniumCompressedDriverPath(){
         return  sprintf("%s%s%s", $this->binDirectory , DIRECTORY_SEPARATOR, sprintf("%sDriverCompressed",  $this->selectedBrowserDriver ));
     }
+
+    public function GetSeleniumRunPort(){
+        return $this->parsedConfig->wpSeleniumPort ?? 4444;
+    }
+
+    public function GetSeleniumRunCommand(){
+
+        switch(Utilities::GetOS()){
+            case "linux":
+                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  %s%sseleniumLog.log 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
+            case "win":
+                return sprintf("start /b java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
+        }
+
+    }
 }
 
 class ProvisionSeleniumConfig{
@@ -185,7 +201,7 @@ class ProvisionSeleniumConfig{
         $this->userSeleniumProvisionConfig =  $this->ConvertToArray($wpSeleniumConfig->wpSeleniumProvision);
 
         $this->combinedSeleniumProvisionConfig = $this->array_merge_recursive_distinct($this->librarySeleniumProvisionConfig,$this->userSeleniumProvisionConfig);
-        $this->availableDrivers = array_keys($this->combinedSeleniumProvisionConfig['driverUrl'][strtolower(PHP_OS)]);
+        $this->availableDrivers = array_keys($this->combinedSeleniumProvisionConfig['driverUrl'][Utilities::GetOS()]);
   
     }
 
@@ -198,6 +214,6 @@ class ProvisionSeleniumConfig{
     }
 
     function GetDriverDownloadUrl($selectedBrowserDriver){
-        return $this->combinedSeleniumProvisionConfig['driverUrl'][strtolower(PHP_OS)][$selectedBrowserDriver];
+        return $this->combinedSeleniumProvisionConfig['driverUrl'][Utilities::GetOS()][$selectedBrowserDriver];
     }
 }

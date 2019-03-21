@@ -4,6 +4,7 @@ namespace WPSelenium\Provision;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\WPSeleniumConfig;
 use WPSelenium\Utilities\Requests;
+use WPSelenium\Utilities\Utilities;
 
 class ProvisionTestPlugin{
 
@@ -58,7 +59,7 @@ class ProvisionTestPlugin{
             return;
         }
         Logger::INFO("Copying WPSelenium Test Plugin to your site");
-        recurse_copy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
+        Utilities::RecursiveCopy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
         //TODO: Check if sucess
 
         Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium test succefully. 
@@ -67,20 +68,3 @@ class ProvisionTestPlugin{
         
     }
 }
-
-// From http://php.net/manual/en/function.copy.php#91010
-function recurse_copy($src,$dst) { 
-    $dir = opendir($src); 
-    @mkdir($dst); 
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . DIRECTORY_SEPARATOR . $file) ) { 
-                recurse_copy($src . DIRECTORY_SEPARATOR . $file,$dst . DIRECTORY_SEPARATOR . $file); 
-            } 
-            else { 
-                copy($src .DIRECTORY_SEPARATOR . $file,$dst .DIRECTORY_SEPARATOR. $file); 
-            } 
-        } 
-    } 
-    closedir($dir); 
-} 

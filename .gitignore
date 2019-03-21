@@ -5,3 +5,4 @@ composer.lock
 .vscode
 bin/
 src/WPSeleniumTest.temp.json
+seleniumLog.log
