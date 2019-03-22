@@ -30,6 +30,7 @@ class TestRunner{
         putenv('PATH=' . getenv('PATH') . PATH_SEPARATOR . $this->wpSeleniumConfig->GetBinDirectory());
         putenv('WPSELENIUM_TEST_SITE=' . $this->wpSeleniumConfig->GetSiteURL() );
         putenv('WPSELENIUM_DRIVER=' . $this->wpSeleniumConfig->GetBroswerDriver() );
+        putenv('WPSELENIUM_TEST_PORT=' . $this->wpSeleniumConfig->GetSeleniumRunPort() );
         
         //adding sleep command to give time for the command to full run/programs exceute
         sleep(1);

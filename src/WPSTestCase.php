@@ -14,7 +14,7 @@ abstract class WPSTestCase extends TestCase{
 
     protected function GetSeleniumDriver(){
         if (self::$seleniumDriver == null){
-            $hosturl = "http://localhost:4444/wd/hub";
+            $hosturl = sprintf("http://localhost:%s/wd/hub", getenv('WPSELENIUM_TEST_PORT'));
             //Note: Report bug. Unable to catch exception when this fails
             self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::{getenv('WPSELENIUM_DRIVER')}());    
             }

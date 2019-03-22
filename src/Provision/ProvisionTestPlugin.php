@@ -55,12 +55,10 @@ class ProvisionTestPlugin{
 
     function CopyTestPlugin(){        
         if (file_exists($this->wpSeleniumPluginInstallPath)){
-            //TODO: Not returning
             return;
         }
         Logger::INFO("Copying WPSelenium Test Plugin to your site");
         Utilities::RecursiveCopy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
-        //TODO: Check if sucess
 
         Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium test succefully. 
                       The plugin has not been activate however, for security reasons. Please login to your WordPress site and 

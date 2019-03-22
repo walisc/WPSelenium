@@ -104,8 +104,8 @@ class WPSeleniumConfig{
         }
 
         return [
-            [CONSTS::WPSELENIUM_TEMP_TEST_DIR_KEY] => $testDirectories,
-            [CONSTS::WPSELENIUM_TEMP_TEST_FILE_KEY] => $testFiles
+            CONSTS::WPSELENIUM_TEMP_TEST_DIR_KEY => $testDirectories,
+            CONSTS::WPSELENIUM_TEMP_TEST_FILE_KEY => $testFiles
         ];
     }
 
