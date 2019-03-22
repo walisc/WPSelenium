@@ -39,7 +39,7 @@ class TestRunner{
     
         $fp = fsockopen("localhost",$this->wpSeleniumConfig->GetSeleniumRunPort(), $errno, $errstr,1);
         if($errstr == "" || $errno == 0){   
-            Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown", );
+            Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
             sleep(1);
         } 
         exec($this->wpSeleniumConfig->GetSeleniumRunCommand());   
