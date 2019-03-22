@@ -40,7 +40,7 @@ class ProvisionSelenium{
     function DownloadSelenium(){
         if (!file_exists($this->seleniumServerServerPath )){
             Logger::INFO("Selenium Server is not installed. Installing now");
-            Requests::GetFile($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), fopen($this->seleniumServerServerPath, "w+"));
+            Requests::GetFile($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), $this->seleniumServerServerPath);
         }
     }
 
@@ -59,7 +59,7 @@ class ProvisionSelenium{
 
         if (!file_exists($saveDriverPath)){
             Logger::INFO("Installing Selenium {$this->selectedBrowserDriver} drivers");
-            Requests::GetFile($driverUrl, fopen($saveDriverPath, "w+") );
+            Requests::GetFile($driverUrl, $saveDriverPath );
             
             switch($fileExtension){
                 case "zip":

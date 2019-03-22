@@ -5,10 +5,17 @@ namespace WPSelenium\Utilities;
 class Requests{
     static function GetFile($url, $filePath){
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_FILE, $filePath);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $fp = fopen($filePath, "w+");
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);    
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+    
         curl_exec($ch);
+        fclose($fp);
         curl_close($ch);
     }
     

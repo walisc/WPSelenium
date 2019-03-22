@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 namespace WPSelenium;
 use WPSelenium\Utilities\CONSTS;
 
