@@ -4,6 +4,7 @@ namespace WPSelenium;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\CONSTS;
 use WPSelenium\Utilities\Utilities;
+use WPSelenium\ArgsParser;
 
 class WPSeleniumConfig{
 
@@ -18,7 +19,7 @@ class WPSeleniumConfig{
     private static $instance = null;
 
 
-    function __construct($configFilePathilePath, $wpSeleniumPathDir, $argc, $argv)
+    function __construct($configFilePathilePath, $wpSeleniumPathDir)
     {
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
@@ -26,6 +27,7 @@ class WPSeleniumConfig{
         $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
         $this->testFiles = $this->ParseTestDirectories(dirname($configFilePathilePath));
+        $this->parsedArgs = (new ArgsParser())->GetOpts();
 
         $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
 
@@ -33,16 +35,16 @@ class WPSeleniumConfig{
             Logger::ERROR("Failed parsing the wpselenium xml file. Please make use it is in the correct format ", true);
         }
 
-        if ($argc < 2)
+        if (!$this->parsedArgs->getOperand('browser'))
         {
             Logger::ERROR(sprintf("Please specify the browser you want to test on. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())), true);
         }
         else{
-            if (!in_array($argv[1],  $this->wpSeleniumProvisionConfig->GetAvailableDrivers())){
+            if (!in_array($this->parsedArgs->getOperand('browser'),  $this->wpSeleniumProvisionConfig->GetAvailableDrivers())){
                 Logger::ERROR(sprintf("The drivers for the browser you are trying to test for do not exist. Available browser drivers:- %s", implode(", ", $this->wpSeleniumProvisionConfig->GetAvailableDrivers())), true);
             }
             else{
-                $this->selectedBrowserDriver = $argv[1];
+                $this->selectedBrowserDriver = $this->parsedArgs->getOperand('browser');
             }
         }
         
@@ -54,6 +56,14 @@ class WPSeleniumConfig{
             Logger::ERROR("Hmm...Thats strange. Are you tring to access the wpselenium config object without configuring it first");
         }
         return self::$instance ;
+    }
+
+    public function IsWordPressSite(){
+        return $this->parsedArgs->getOption('wp');
+    }
+
+    public function GetLogLevel(){
+        return $this->parsedArgs->getOption('loglevel', true);
     }
 
     public function GetSiteURL(){

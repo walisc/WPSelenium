@@ -1,17 +1,30 @@
 <?php
 
 namespace WPSelenium\Utilities;
+use WPSelenium\WPSeleniumConfig;
 
 Class Logger{
 
+    private static function GetLoglevel(){
+        return strtolower((WPSeleniumConfig::Get())->GetLogLevel());
+    }
     static function INFO($msg){
-        echo sprintf("\n\033[32m %s INFO:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
+        if(!in_array(self::GetLoglevel(), ["warn", "error", "fatal"]) )
+        {
+            echo sprintf("\n\033[32m %s INFO:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
+        }
     }
     static function WARN($msg){
-        echo sprintf("\n\033[33m %s WARN:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
+        if(!in_array(self::GetLoglevel(), ["error", "fatal"]) )
+        {
+            echo sprintf("\n\033[33m %s WARN:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
+        }
     }
     static function ERROR($msg, $shouldExit=false){
-        echo sprintf("\n\033[31m %s ERROR:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg);     
+        if(!in_array(self::GetLoglevel(), ["fatal"]) )
+        {
+            echo sprintf("\n\033[31m %s ERROR:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg);   
+        }  
         self::Quit ($shouldExit);
     }
     static function FATAL($msg, $shouldExit){

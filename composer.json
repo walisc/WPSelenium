@@ -13,7 +13,8 @@
     "require":  {
         "php" : "^7.1",
         "phpunit/phpunit": "7.4.5",
-        "facebook/webdriver": "^1.0"
+        "facebook/webdriver": "^1.0",
+        "ulrichsg/getopt-php": "^3.2"
     }, 
     "autoload": {
         "psr-4": {

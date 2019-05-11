@@ -18,6 +18,8 @@ class ProvisionTestPlugin{
     }
     function __construct()
     {
+        if (!WPSeleniumConfig::Get()->IsWordPressSite()){return;}
+        
         $ds = DIRECTORY_SEPARATOR;
         $this->sitePath = WPSeleniumConfig::Get()->GetSitePath();
         $this->siteUrl = WPSeleniumConfig::Get()->GetSiteUrl();

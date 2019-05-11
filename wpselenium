@@ -11,6 +11,7 @@ use WPSelenium\Provision\ProvisionTestPlugin;
 use WPSelenium\Provision\ProvisionSelenium;
 use WPSelenium\TestRunner;
 
+
 echo "--- WPooW Tests Runner --- \n";
 $wpseleniumConfigFile = sprintf("%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "wpselenium.xml");
 
@@ -19,7 +20,7 @@ if (!file_exists($wpseleniumConfigFile)){
     Quit();
 }
 
-(new WPSeleniumConfig($wpseleniumConfigFile, __DIR__, $argc, $argv));
+(new WPSeleniumConfig($wpseleniumConfigFile, __DIR__));
 
 ProvisionTestPlugin::Provision();
 ProvisionSelenium::Provision();
