@@ -5,6 +5,7 @@ use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\CONSTS;
 use WPSelenium\Utilities\Utilities;
 use WPSelenium\ArgsParser;
+use WPSelenium\Utilities\Requests;
 
 class WPSeleniumConfig{
 
@@ -19,7 +20,8 @@ class WPSeleniumConfig{
     private static $instance = null;
 
 
-    function __construct($configFilePathilePath, $wpSeleniumPathDir)
+    function __construct(
+        $configFilePathilePath, $wpSeleniumPathDir)
     {
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
@@ -28,7 +30,13 @@ class WPSeleniumConfig{
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
         $this->testFiles = $this->ParseTestDirectories(dirname($configFilePathilePath));
         $this->parsedArgs = (new ArgsParser())->GetOpts();
+        Logger::SetLoglevel($this->parsedArgs->getOption('loglevel', true));
+        $this->ConfigParse();
+        
+        self::$instance = $this; 
+    }
 
+    private function ConfigParse(){
         $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
 
         if ($this->parsedConfig === false){
@@ -46,24 +54,23 @@ class WPSeleniumConfig{
             else{
                 $this->selectedBrowserDriver = $this->parsedArgs->getOperand('browser');
             }
+
+            if(!Requests::SiteUp($this->GetSiteURL())){
+                Logger::ERROR(sprintf("This site you are trying to test seems to be down/offline. Cannot continue with the selenium tests if this is the case. Site URL:- %s", $this->GetSiteURL()), true);
+            }
         }
         
-        self::$instance = $this; 
     }
 
     static function Get(){
         if (self::$instance == null){
-            Logger::ERROR("Hmm...Thats strange. Are you tring to access the wpselenium config object without configuring it first");
+            Logger::ERROR("Hmm...Thats strange. Are you tring to access the wpselenium config object without configuring it first", true);
         }
         return self::$instance ;
     }
 
     public function IsWordPressSite(){
         return $this->parsedArgs->getOption('wp');
-    }
-
-    public function GetLogLevel(){
-        return $this->parsedArgs->getOption('loglevel', true);
     }
 
     public function GetSiteURL(){

@@ -18,6 +18,20 @@ class Requests{
         fclose($fp);
         curl_close($ch);
     }
+
+    static function SiteUp($url) {
+        $curlInit = curl_init($url);
+        curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
+        curl_setopt($curlInit,CURLOPT_HEADER,true);
+        curl_setopt($curlInit,CURLOPT_NOBODY,true);
+        curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);
+
+        $response = curl_exec($curlInit);
+     
+        curl_close($curlInit);
+        if ($response) return true;
+        return false;
+     }
     
     static function Post($url, $postFields){
         $ch=curl_init($url);

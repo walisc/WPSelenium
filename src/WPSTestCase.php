@@ -22,7 +22,7 @@ abstract class WPSTestCase extends TestCase{
     }
 
     public function GetTestSite(){
-        return sprintf("http://%s/", getenv('WPSELENIUM_TEST_SITE'));
+        return getenv('WPSELENIUM_TEST_SITE');
     }
 
     public function GetSelectedBrowser(){

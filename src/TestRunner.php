@@ -36,15 +36,13 @@ class TestRunner{
         sleep(1);
         # 3. Starting Selenium
         Logger::INFO("---- Starting Selenium----- \n\n");
-    
-        $fp = fsockopen("localhost",$this->wpSeleniumConfig->GetSeleniumRunPort(), $errno, $errstr,1);
-        if($errstr == "" || $errno == 0){   
+
+        if (!Requests::SiteUp("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}")){ 
             Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
             sleep(1);
         } 
         exec($this->wpSeleniumConfig->GetSeleniumRunCommand());   
         sleep(1);
-        fclose($fp);
     }
 
     function StartWPSeleniumTests(){

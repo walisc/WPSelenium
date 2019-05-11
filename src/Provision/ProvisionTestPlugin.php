@@ -33,7 +33,7 @@ class ProvisionTestPlugin{
     }
 
     function LinkToPlugin(){
-        $result = Requests::Post(sprintf('http://%s/wp-admin/admin-ajax.php', $this->siteUrl),  "action=wpselenium_testing_request");
+        $result = Requests::Post(sprintf('%s/wp-admin/admin-ajax.php', $this->siteUrl),  "action=wpselenium_testing_request");
         $resultDic = json_decode(substr($result,0,strlen($result)-1), true);
 
         if (!$resultDic["WPSeleniumLinked"]){
