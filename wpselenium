@@ -2,7 +2,7 @@
 
 <?php
 
-//error_reporting(E_ERROR  | E_PARSE );
+error_reporting( E_PARSE );
 
 include_once sprintf("%s%s%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
 use WPSelenium\WPSeleniumConfig;
@@ -15,8 +15,7 @@ echo "--- WPSelenium Tests Runner --- \n";
 $wpseleniumConfigFile = sprintf("%s%s%s", getcwd(), DIRECTORY_SEPARATOR, "wpselenium.xml");
 
 if (!file_exists($wpseleniumConfigFile)){
-    Logger::ERROR(sprintf("wpselenium.xml config not found. Please ensure that the file existes in the root of your project. Looking in %s", getcwd()));
-    Quit();
+    Logger::ERROR(sprintf("wpselenium.xml config not found. Please ensure that the file existes in the root of your project. Looking in %s", getcwd()), true);
 }
 
 (new WPSeleniumConfig($wpseleniumConfigFile, __DIR__));
