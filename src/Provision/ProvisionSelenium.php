@@ -65,7 +65,7 @@ class ProvisionSelenium{
                                                                    sprintf("driver.%s.%s", Utilities::GetOS(),$this->selectedBrowserDriver),
                                                                    "Installing Selenium {$this->selectedBrowserDriver} drivers");
                                                                    
-        if ($downloadFileResults == CONSTS::DOWNLOAD_FILE_DOWNLOADED){            
+        if ($downloadFileResults["status"] == CONSTS::DOWNLOAD_FILE_DOWNLOADED){            
             switch($fileExtension){
                 case "zip":
                     $zip = new \ZipArchive;
