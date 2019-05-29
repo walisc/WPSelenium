@@ -14,14 +14,14 @@ class ArgsParser{
     {
         $this->getOpt = new GetOpt();
         $this->getOpt->addOperand((new Operand('browser', Operand::REQUIRED))
-                    ->setDescription("If you are testing a WordPress site. Adds extra feature to testing on WordPress easier."));
+                    ->setDescription("Brower you want to test on. Chrome and Firefox supported by default. See documenation if you want to add others."));
         $this->getOpt->addOptions([
             Option::create(null, 'wp', GetOpt::NO_ARGUMENT)
-                ->setDescription("If you are testing a WordPress site. Adds extra feature to testing on WordPress easier."),
+                ->setDescription("If you are testing a WordPress site. Adds extra features for testing on WordPress."),
             Option::create(null, 'loglevel', GetOpt::MULTIPLE_ARGUMENT)
-                ->setDescription("Console loglevel - INFO, WARN, ERROR, DEBUG"),
+                ->setDescription("Console loglevel - info, warn, error, debug."),
             Option::create('?', 'help', GetOpt::NO_ARGUMENT)
-                ->setDescription('Show this help and quit'),
+                ->setDescription('Show this help and quit.'),
         ]);
 
         $this->getOpt->setHelp(new WPSeleniumHelp());
