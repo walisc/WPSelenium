@@ -3,6 +3,7 @@
 namespace WPSelenium\Utilities;
 
 class Requests{
+
     static function GetFile($url, $filePath){
 
         $fp = fopen($filePath, "w+");
@@ -17,6 +18,7 @@ class Requests{
         curl_exec($ch);
         fclose($fp);
         curl_close($ch);
+        return $ch;
     }
 
     static function SiteUp($url) {

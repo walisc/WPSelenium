@@ -46,6 +46,7 @@ class TestRunner{
     }
 
     function StartWPSeleniumTests(){
+        //TODO: Only do this if there is
         $doc = new \DOMDocument("1.0", "ISO-8859-15");
         $doc->formatOutput = TRUE;
         $doc->loadXML($this->wpSeleniumConfig->GetPhpUnitConfig()->asXML());

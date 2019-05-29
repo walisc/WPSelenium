@@ -5,6 +5,7 @@ use WPSelenium\WPSeleniumConfig;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\Requests;
 use WPSelenium\Utilities\Utilities;
+use WPSelenium\Utilities\CONSTS;
 
 class ProvisionSelenium{
 
@@ -38,10 +39,11 @@ class ProvisionSelenium{
     }
 
     function DownloadSelenium(){
-        if (!file_exists($this->seleniumServerServerPath )){
-            Logger::INFO("Selenium Server is not installed. Installing now");
-            Requests::GetFile($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), $this->seleniumServerServerPath);
-        }
+        Utilities::DownloadFileAndCheckHash($this->wpSeleniumProvisionConfig->GetSeleniumDownloadUrl(), 
+                                            $this->seleniumServerServerPath, 
+                                            "seleniumServer",
+                                            "Selenium Server is not installed. Installing now");
+    
     }
 
     function DownloadSeleniumDrivers(){
@@ -57,10 +59,13 @@ class ProvisionSelenium{
 
         $saveDriverPath = "$this->seleniumCompressedDriverPath.$fileExtension";
 
-        if (!file_exists($saveDriverPath)){
-            Logger::INFO("Installing Selenium {$this->selectedBrowserDriver} drivers");
-            Requests::GetFile($driverUrl, $saveDriverPath );
-            
+        
+        $downloadFileResults = Utilities::DownloadFileAndCheckHash($driverUrl, 
+                                                                   $saveDriverPath, 
+                                                                   sprintf("driver.%s.%s", Utilities::GetOS(),$this->selectedBrowserDriver),
+                                                                   "Installing Selenium {$this->selectedBrowserDriver} drivers");
+                                                                   
+        if ($downloadFileResults == CONSTS::DOWNLOAD_FILE_DOWNLOADED){            
             switch($fileExtension){
                 case "zip":
                     $zip = new \ZipArchive;
@@ -74,10 +79,7 @@ class ProvisionSelenium{
                     $phar = new \PharData(str_replace(".gz","",$saveDriverPath));
                     $phar->extractTo($this->wpSeleniumBinPath);
             }
-            
-            
-    
-            
+        
         }
     } 
 }
