@@ -39,7 +39,7 @@ class Utilities{
             $hashFileObj[$hash_key] = $fileHash;
             self::WriteHashFile($hashFilePath, $hashFileObj);
 
-            $$end_download_message == null ? "" : Logger::INFO($end_download_message); 
+            $end_download_message == null ? "" : Logger::INFO($end_download_message); 
 
             return [
                 "status" => CONSTS::DOWNLOAD_FILE_DOWNLOADED

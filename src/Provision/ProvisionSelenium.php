@@ -70,14 +70,28 @@ class ProvisionSelenium{
                 case "zip":
                     $zip = new \ZipArchive;
                     $res = $zip->open($saveDriverPath);
+                    if ($res == TRUE){
+                        for($i = 0; $i < $zip->numFiles; $i++) {
+                            $filename = $zip->getNameIndex($i);
+                            $potential_file_path =  sprintf("%s%s%s",$this->wpSeleniumBinPath, DIRECTORY_SEPARATOR, $filename );
+                            if (file_exists($potential_file_path)){
+                                unlink($potential_file_path);
+                            }
+                        }
+                    }
                     $zip->extractTo($this->wpSeleniumBinPath);
                     $zip->close();
                     break;
                 case "tar.gz":
+                    $saveDriverPathTar = str_replace(".gz","",$saveDriverPath);
+                    if (file_exists($saveDriverPathTar)){
+                        unlink($saveDriverPathTar);
+                    }
                     $p = new \PharData($saveDriverPath);
                     $p->decompress(); 
-                    $phar = new \PharData(str_replace(".gz","",$saveDriverPath));
-                    $phar->extractTo($this->wpSeleniumBinPath);
+                    $phar = new \PharData($saveDriverPathTar);
+                    $phar->extractTo($this->wpSeleniumBinPath, null, TRUE);
+                    break;
             }
         
         }
