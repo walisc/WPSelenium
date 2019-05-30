@@ -37,7 +37,7 @@ class TestRunner{
         # 3. Starting Selenium
         Logger::INFO("---- Starting Selenium----- \n\n");
 
-        if (!Requests::SiteUp("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}")){ 
+        if (Requests::SiteUp("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}")){ 
             Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
             sleep(1);
         } 
@@ -55,8 +55,10 @@ class TestRunner{
 
         Logger::INFO("---- Running WPSelenium Tests---- \n\n");
         system($this->wpSeleniumConfig->GetPhpUnitPath());
+        Logger::INFO("---- Completed Running WPSelenium Tests. Shutting Down.---- \n\n");
+        sleep(2);
         Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
-        sleep(1);
+        
     }
     
     

@@ -28,5 +28,13 @@ abstract class WPSTestCase extends TestCase{
     public function GetSelectedBrowser(){
         return getenv('WPSELENIUM_DRIVER');
     }
+
+    function __destruct()
+    {
+        if (self::$seleniumDriver != null){
+        self::$seleniumDriver->quit();
+        }
+    }
+   
 }
 
