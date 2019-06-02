@@ -30,10 +30,9 @@ class Utilities{
         }
 
         if ($isDifferentFile || !file_exists($filePath) ){
-            $start_download_message == null ? "" : Logger::INFO($start_download_message);
-            //TODO: Not giving feedback whenit fails 
+            $start_download_message == null ? "" : Logger::INFO($start_download_message); 
             if (Requests::GetFile($url, $filePath) === FALSE){
-                Logger::ERROR("Could not download file for $url.", TRUE);
+                Logger::ERROR("Could not download file from $url. Please make sure you are online and the url is correct.", TRUE);
             }
 
             $hashFileObj[$hash_key] = $fileHash;

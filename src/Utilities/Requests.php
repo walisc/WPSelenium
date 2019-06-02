@@ -15,10 +15,10 @@ class Requests{
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);    
         curl_setopt($ch, CURLOPT_FILE, $fp);
     
-        curl_exec($ch);
+        $response = curl_exec($ch);
         fclose($fp);
         curl_close($ch);
-        return $ch;
+        return $response;
     }
 
     static function SiteUp($url) {
