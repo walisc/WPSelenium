@@ -46,13 +46,17 @@ class TestRunner{
     }
 
     function StartWPSeleniumTests(){
-        //TODO: Only do this if there is
-        $doc = new \DOMDocument("1.0", "ISO-8859-15");
-        $doc->formatOutput = TRUE;
-        $doc->loadXML($this->wpSeleniumConfig->GetPhpUnitConfig()->asXML());
-        $doc->saveXML();
-        $doc->save( $this->wpSeleniumConfig->GetPhpUnitConfigPath());
-
+        $phpunitConfig = $this->wpSeleniumConfig->GetPhpUnitConfig();
+        $phpunitConfigPath = $this->wpSeleniumConfig->GetPhpUnitConfigPath();
+        
+        if (!file_exists($phpunitConfigPath) || (file_exists($phpunitConfigPath) && !$phpunitConfig["isSample"])){
+            $doc = new \DOMDocument("1.0", "ISO-8859-15");
+            $doc->formatOutput = TRUE;
+            $doc->loadXML(($this->wpSeleniumConfig->GetPhpUnitConfig()["config"])->asXML());
+            $doc->saveXML();
+            $doc->save( $phpunitConfigPath);
+        }
+        
         Logger::INFO("---- Running WPSelenium Tests---- \n\n");
         system($this->wpSeleniumConfig->GetPhpUnitPath());
         Logger::INFO("---- Completed Running WPSelenium Tests. Shutting Down.---- \n\n");

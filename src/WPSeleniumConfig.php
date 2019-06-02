@@ -15,7 +15,9 @@ class WPSeleniumConfig{
     private $selectedBrowserDriver;
     private $binDirectory;
     private $phpUnitPath;
+    private $phpUnitConfig;
     private $phpUnitConfigPath;
+    private $configFilePathilePath;
     private $testFiles;
     private static $instance = null;
 
@@ -23,21 +25,22 @@ class WPSeleniumConfig{
     function __construct(
         $configFilePathilePath, $wpSeleniumPathDir)
     {
+        $this->configFilePathilePath = $configFilePathilePath;
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
         $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
         $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
         $this->parsedConfig=simplexml_load_file($configFilePathilePath);
-        $this->testFiles = $this->ParseTestDirectories(dirname($configFilePathilePath));
         $this->parsedArgs = (new ArgsParser())->GetOpts();
         Logger::SetLoglevel($this->parsedArgs->getOption('loglevel', true));
         $this->ConfigParse();
-        
+        $this->SetUpPhpUintTests();
         self::$instance = $this; 
     }
 
     private function ConfigParse(){
         $this->wpSeleniumProvisionConfig = new ProvisionSeleniumConfig($this->parsedConfig);
+
 
         if ($this->parsedConfig === false){
             Logger::ERROR("Failed parsing the wpselenium xml file. Please make use it is in the correct format ", true);
@@ -60,6 +63,17 @@ class WPSeleniumConfig{
             }
         }
         
+    }
+
+    private function SetUpPhpUintTests(){
+        if (empty($this->parsedConfig->phpunit)){
+            $this->phpUnitConfig = [ "isSample" => true,
+                                     "config" => simplexml_load_file(sprintf("%s%s%s%s%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "src", DIRECTORY_SEPARATOR, "Sample", DIRECTORY_SEPARATOR, "sample_phpunit.config.xml"))];
+        }else{
+            $this->phpUnitConfig = [ "isSample" => false,
+                                     "config" => $this->parsedConfig->phpunit];
+        }
+        $this->testFiles = $this->ParseTestDirectories(dirname($this->configFilePathilePath));
     }
 
     static function Get(){
@@ -101,7 +115,7 @@ class WPSeleniumConfig{
             }   
         }
 
-        $testSuites = get_object_vars( $this->parsedConfig->phpunit->testsuites)['testsuite'];
+        $testSuites = get_object_vars( $this->phpUnitConfig["config"]->testsuites)['testsuite'];
         
         if (is_array($testSuites))
         {
@@ -135,7 +149,7 @@ class WPSeleniumConfig{
     }
 
     public function GetPhpUnitConfig(){
-        return $this->parsedConfig->phpunit;
+        return $this->phpUnitConfig;
     }
 
     public function GetPhpUnitConfigPath(){

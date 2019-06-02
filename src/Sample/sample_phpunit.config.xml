@@ -1,0 +1,7 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="WPSelenium Sample Tests">
+        <file>vendor/devchid/wpselenium/src/Sample/SampleTest</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
