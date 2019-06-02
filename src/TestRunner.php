@@ -4,6 +4,7 @@ namespace WPSelenium;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\Requests;
 use WPSelenium\Utilities\CONSTS;
+use WPSelenium\Utilities\Utilities;
 
 class TestRunner{
 
@@ -41,7 +42,7 @@ class TestRunner{
             Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
             sleep(1);
         } 
-        exec($this->wpSeleniumConfig->GetSeleniumRunCommand());   
+        Utilities::StartProcessInBackground($this->wpSeleniumConfig->GetSeleniumRunCommand());
         sleep(1);
     }
 

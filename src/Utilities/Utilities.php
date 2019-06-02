@@ -9,12 +9,21 @@ class Utilities{
         fclose($hashFileHandler);
     }
 
+    static function StartProcessInBackground($runCommand){
+        switch(Utilities::GetOS()){
+            case "linux":
+                exec($runCommand);   
+            case "win":
+                pclose(popen(sprintf("start /B %s",$runCommand), "r"));
+        }
+    }
+
     static function DownloadFileAndCheckHash($url, $filePath, $hash_key, $start_download_message=null, $end_download_message=null){
         
         $fileHash = hash("md5", $url);
         $hashFilePath = sprintf("%s%shash_file", dirname($filePath), DIRECTORY_SEPARATOR);
         
-        $hashFileObj = null;
+        $hashFileObj = [];
         $isDifferentFile = FALSE;
 
         if (!file_exists($hashFilePath)){
@@ -26,6 +35,10 @@ class Utilities{
         }
         else{
             $hashFileObj = json_decode(file_get_contents($hashFilePath), true);
+            if (!array_key_exists($hash_key, $hashFileObj))
+            {
+                $hashFileObj[$hash_key] = $fileHash;
+            }
             $isDifferentFile = $hashFileObj[$hash_key] != $fileHash;
         }
 

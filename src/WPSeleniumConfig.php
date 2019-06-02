@@ -193,7 +193,7 @@ class WPSeleniumConfig{
             case "linux":
                 return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  %s%sseleniumLog.log 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
             case "win":
-                return sprintf("start /b java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
+                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
         }
 
     }
