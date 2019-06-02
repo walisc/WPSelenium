@@ -32,6 +32,9 @@ class Utilities{
         if ($isDifferentFile || !file_exists($filePath) ){
             $start_download_message == null ? "" : Logger::INFO($start_download_message); 
             if (Requests::GetFile($url, $filePath) === FALSE){
+                if (file_exists($filePath)){
+                    unlink($filePath);
+                }
                 Logger::ERROR("Could not download file from $url. Please make sure you are online and the url is correct.", TRUE);
             }
 

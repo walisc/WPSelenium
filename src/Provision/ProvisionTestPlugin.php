@@ -49,7 +49,7 @@ class ProvisionTestPlugin{
                 Logger::INFO("WPSelenium linked to site successfully");
             }
             else{
-                Logger::ERROR("Cant seem to be able to communicate WPSelenium Test Plugin. Make sure your site is running and you have added and activated it the WPSelenium Test Plugin.", true);
+                Logger::ERROR("Can't seem to be able to communicate with the WPSelenium Test Plugin. Please make sure your site is running and you have added and activated the WPSelenium Test Plugin.", true);
             }
         }
     
@@ -62,9 +62,8 @@ class ProvisionTestPlugin{
         Logger::INFO("Copying WPSelenium Test Plugin to your site");
         Utilities::RecursiveCopy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
 
-        Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium test succefully. 
-                      The plugin has not been activate however, for security reasons. Please login to your WordPress site and 
-                      activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.", true);
+        Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium tests succesfully. 
+        For security reasons, the plugin has not been activated. Please login to your WordPress site and activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.", true);
         
     }
 }

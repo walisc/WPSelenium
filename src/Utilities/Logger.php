@@ -10,17 +10,19 @@ Class Logger{
     static function SetLoglevel($loglevel){
         return self::$loglevel = strtolower($loglevel);
     }
-    static function INFO($msg){
+    static function INFO($msg, $shouldExit=false){
         if(!in_array(self::$loglevel, ["warn", "error", "fatal"]) )
         {
             echo sprintf("\n\033[32m %s INFO:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
         }
+        self::Quit ($shouldExit);  
     }
-    static function WARN($msg){
+    static function WARN($msg, $shouldExit=false){
         if(!in_array(self::$loglevel, ["error", "fatal"]) )
         {
             echo sprintf("\n\033[33m %s WARN:\033[0m %s\n",  date("Y-m-d H:i:s"), $msg); 
         }
+        self::Quit ($shouldExit);  
     }
     static function ERROR($msg, $shouldExit=false){
         if(!in_array(self::$loglevel, ["fatal"]) )
