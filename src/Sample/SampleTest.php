@@ -5,9 +5,12 @@ use WPSelenium\WPSTestCase;
  class SampleTest extends WPSTestCase{
 
 
-    protected function setUp()
+    function testCanOpenSite()
     {  
         $this->GetSeleniumDriver()->get($this->GetTestSite());
+	sleep(10);
+	
     }
+
 
 }
