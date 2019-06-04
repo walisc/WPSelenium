@@ -69,13 +69,14 @@ class TestRunner{
     }
 
     function CleanUp(){
+        //TODO: Maybe add thise commands to the config
         switch(Utilities::GetOS()){
             case "linux":
                 if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_CHROME){
                     exec("if pgrep chromedriver; then pgrep chromedriver | xargs kill -9; fi");
                 }
                 else if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_FIREFOX){
-
+                    exec("if pgrep geckodriver; then pgrep geckodriver | xargs kill -9; fi");
                 }
                 break;
             case "win":
@@ -83,7 +84,6 @@ class TestRunner{
                     exec("taskkill /im chromedriver.exe /f");
                 }
                 else if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_FIREFOX){
-
                 }
                 break;
         }
