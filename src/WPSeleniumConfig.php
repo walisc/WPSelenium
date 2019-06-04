@@ -17,20 +17,20 @@ class WPSeleniumConfig{
     private $phpUnitPath;
     private $phpUnitConfig;
     private $phpUnitConfigPath;
-    private $configFilePathilePath;
+    private $configFilePathFilePath;
     private $testFiles;
     private static $instance = null;
 
 
     function __construct(
-        $configFilePathilePath, $wpSeleniumPathDir)
+        $configFilePathFilePath, $wpSeleniumPathDir)
     {
-        $this->configFilePathilePath = $configFilePathilePath;
+        $this->configFilePathFilePath = $configFilePathFilePath;
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
         $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
-        $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
-        $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
-        $this->parsedConfig=simplexml_load_file($configFilePathilePath);
+        $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathFilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
+        $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathFilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
+        $this->parsedConfig=simplexml_load_file($configFilePathFilePath);
         $this->parsedArgs = (new ArgsParser())->GetOpts();
         Logger::SetLoglevel($this->parsedArgs->getOption('loglevel', true));
         $this->ConfigParse();
@@ -73,7 +73,7 @@ class WPSeleniumConfig{
             $this->phpUnitConfig = [ "isSample" => false,
                                      "config" => $this->parsedConfig->phpunit];
         }
-        $this->testFiles = $this->ParseTestDirectories(dirname($this->configFilePathilePath));
+        $this->testFiles = $this->ParseTestDirectories(dirname($this->configFilePathFilePath));
     }
 
     static function Get(){
@@ -191,9 +191,9 @@ class WPSeleniumConfig{
 
         switch(Utilities::GetOS()){
             case "linux":
-                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  %s%sseleniumLog.log 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
+                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  %s%sseleniumLog.log 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
             case "win":
-                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR );
+                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
         }
 
     }

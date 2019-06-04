@@ -44,7 +44,7 @@ class TestRunner{
             sleep(1);
         } 
         Utilities::StartProcessInBackground($this->wpSeleniumConfig->GetSeleniumRunCommand());
-        sleep(1);
+        sleep(2);
     }
 
     function StartWPSeleniumTests(){
