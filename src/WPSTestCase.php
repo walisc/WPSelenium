@@ -35,6 +35,5 @@ abstract class WPSTestCase extends TestCase{
         self::$seleniumDriver->quit();
         }
     }
-   
 }
 

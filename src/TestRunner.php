@@ -23,6 +23,7 @@ class TestRunner{
         fclose($fp);
         $this->StartSeleniumServer();
         $this->StartWPSeleniumTests();
+        $this->CleanUp();
     }
 
     function StartSeleniumServer(){
@@ -61,9 +62,31 @@ class TestRunner{
         Logger::INFO("---- Running WPSelenium Tests---- \n\n");
         system($this->wpSeleniumConfig->GetPhpUnitPath());
         Logger::INFO("---- Completed Running WPSelenium Tests. Shutting Down.---- \n\n");
-        sleep(2);
+        sleep(1);
         Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
+        sleep(2);
         
+    }
+
+    function CleanUp(){
+        switch(Utilities::GetOS()){
+            case "linux":
+                if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_CHROME){
+                    exec("if pgrep chromedriver; then pgrep chromedriver | xargs kill -9; fi");
+                }
+                else if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_FIREFOX){
+
+                }
+                break;
+            case "win":
+                if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_CHROME){
+                    exec("taskkill /im chromedriver.exe /f");
+                }
+                else if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_FIREFOX){
+
+                }
+                break;
+        }
     }
     
     
