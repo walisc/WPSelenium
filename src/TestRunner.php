@@ -81,9 +81,10 @@ class TestRunner{
                 break;
             case "win":
                 if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_CHROME){
-                    exec("taskkill /im chromedriver.exe /f");
+                    exec("taskkill /im chromedriver.exe /f 2>&1 | exit /B 0");
                 }
                 else if ($this->wpSeleniumConfig->GetBroswerDriver() == CONSTS::SUPPORTED_DRIVERS_FIREFOX){
+		    exec("taskkill /im geckodriver.exe /f 2>&1 | exit /B 0");
                 }
                 break;
         }
