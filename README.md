@@ -52,8 +52,6 @@ Below if a very basic sample configuration to get you going. Please see the [wps
 ```xml
 <wpselenium>
     <siteUrl>http://localhost:3000</siteUrl>
-    <phpunit bootstrap="vendor/autoload.php">
-    </phpunit>
 </wpselenium>
 
 ``` 
@@ -75,6 +73,7 @@ If everything was configured properly you should see a browser window opened up 
 > Note:- 
 > 1.  On first run WPSelenium will download the required files and configure those appropriately. This means your first run will take a little bit long to start testing your site.  
 > 2. WPSelenium currently comes with only support for chrome and firefox. However if there is another browser you want to test you can specify the link to the browser drivers in you wpselenium config. From there you can rerun the above command using the specified name of your driver (I.e  /vendor/bin/wpselenium –wp opera). See Configuration section for more details.
+
 
 If you managed to see the home page of your site like the above example, everything is set up correct. You can now go ahead and [write your tests](/docs/WritingTests-WPTestCase.html).
  
