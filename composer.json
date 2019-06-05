@@ -2,6 +2,15 @@
     "name": "devchid/wpselenium",
     "description": "WPSelenium is a library that allows you to quickly get up and running testing your site with selenium and phpunit.",
     "type": "library",
+    "keywords": [
+        "selenium",
+        "phpunit",
+        "webdrivers",
+        "composer",
+        "facebook",
+        "php"
+    ],
+    "homepage": "http://wpselenium.devchid.com/",
     "license": "MIT",
     "authors": [
         {
