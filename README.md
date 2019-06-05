@@ -70,8 +70,9 @@ If everything was configured properly you should see a browser window opened up 
 ![example_login](http://wpselenium.devchid.com/images/example/login_chrome.png)
 
 
+
 > Note:- 
-> 1.  On first run WPSelenium will download the required files and configure those appropriately. This means your first run will take a little bit long to start testing your site.  
+> 1. On first run WPSelenium will download the required files and configure those appropriately. This means your first run will take a little bit long to start testing your site.  
 > 2. WPSelenium currently comes with only support for chrome and firefox. However if there is another browser you want to test you can specify the link to the browser drivers in you wpselenium config. From there you can rerun the above command using the specified name of your driver (I.e  /vendor/bin/wpselenium –wp opera). See Configuration section for more details.
 
 
