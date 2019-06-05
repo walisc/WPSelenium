@@ -1,6 +1,6 @@
 {
     "name": "devchid/wpselenium",
-    "description": "libray to assit testing WordPress UI elements using Selenium and phpunit",
+    "description": "WPSelenium is a library that allows you to quickly get up and running testing your site with selenium and phpunit.",
     "type": "library",
     "license": "MIT",
     "authors": [
