@@ -42,23 +42,30 @@ To get started with WPselenium install it using composer using the following com
 > **Note:-** This command assumes that the working directory you are running it from is a composer project. If not, you can easily make it one buy running
 `composer init` or adding a `composer.json` file.
 
-> **Note:-** WPSelnenium curently downloads the **74.0.3729.6 chrome drivers** and the **0.24 firefox gecko drivers**. If your browser needs a newer or older vesion of a driver (you will get error suggesting this if unsure) please specify an updated download url for the driver in the wpselenium.xml config file. Please see [wpselenium.xml > Advance](/docs/AdvanceConfig.html) for more details.
+> **Note:-** WPSelnenium curently downloads the **74.0.3729.6 chrome drivers** and the **0.24 firefox gecko drivers**. If your browser needs a newer or older vesion of a driver (you will get error suggesting this if unsure) please specify an updated download url for the driver in the wpselenium.xml config file. Please see the [documentation site](http://wpselenium.devchid.com/) for more details.
 
  
 ### 2. Configure
 Having installed wpselenium you need to create a wpselenium.xml config file. This file should be in the same location as you `composer.json` file.
-Below if a very basic sample configuration to get you going. Please see the [wpselenium.xml](/docs/BasicConfig.html) section below for more options.
+Below if a very basic sample configuration to get you going. 
 
 ```xml
 <wpselenium>
     <siteUrl>http://localhost:3000</siteUrl>
+    <phpunit bootstrap="vendor/autoload.php">
+          <testsuites>
+              <testsuite name="WPSelenium Sample Tests">
+                  <file>vendor/devchid/wpselenium/src/Sample/SampleTest.php</file>
+              </testsuite>
+          </testsuites>
+    </phpunit>
 </wpselenium>
 
 ``` 
 
 You will need to replace siteUrl, with you own site you are trying to test. 
 
-> Note:- The WPSelenium.xml embeds the phpunit config, using the phpunit endpoint. This specified config is what is loaded when testing your project with phpunit. This means you can specific any config you would for phpunit in under this config item.
+> Note:- The WPSelenium.xml can embed the phpunit config, using the phpunit endpoint (like above). This specified config is then loaded when testing your project with phpunit. However if you want to create your own phpunit config file (phpunit.xml) you can also do this (and not include it here). See [documentation site](http://wpselenium.devchid.com/) for more details.
  
 ### 3. Run Tests
 After this previous step you are in essence done. You can run the following command from the same location as your `composer.json` file (were browser_driver can either be chrome or firefox)
@@ -70,13 +77,12 @@ If everything was configured properly you should see a browser window opened up 
 ![example_login](http://wpselenium.devchid.com/images/example/login_chrome.png)
 
 
-
 > Note:- 
 > 1. On first run WPSelenium will download the required files and configure those appropriately. This means your first run will take a little bit long to start testing your site.  
 > 2. WPSelenium currently comes with only support for chrome and firefox. However if there is another browser you want to test you can specify the link to the browser drivers in you wpselenium config. From there you can rerun the above command using the specified name of your driver (I.e  /vendor/bin/wpselenium –wp opera). See Configuration section for more details.
 
 
-If you managed to see the home page of your site like the above example, everything is set up correct. You can now go ahead and [write your tests](/docs/WritingTests-WPTestCase.html).
+If you managed to see the home page of your site like the above example, everything is set up correct. You can now go ahead and write your tests.
  
 
 ## WordPress Support
