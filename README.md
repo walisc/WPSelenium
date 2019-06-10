@@ -3,7 +3,7 @@
 
 WPSelenium is a library that quickly gets you up and running when you want to test your site using selenium and phpunit. It does this by installing and configuring [phpunit](https://phpunit.de/), the [selenium server](https://www.seleniumhq.org/download/), the [php client webdriver (by facebook)](https://github.com/facebook/php-webdriver) and the correct drivers for the browser you want to test on. Once installed all you have to worry about is writing your selenium php tests.
 
-WPSelenium also include support for testing WordPress plugins and themes. It does this by providing WordPress specific hooks and configuration end points you can use.
+WPSelenium also includes support for testing WordPress plugins and themes. It does this by providing WordPress specific hooks and configuration end points you can use.
 
 **Usage**
 
@@ -28,14 +28,14 @@ Options:
 ### Requirements
 
 In order to run WPSelenium you will need to have the following installed
-* [Java](https://java.com/en/download/help/download_options.xml) (and make sure it on you system path. Type java in your terminal or command line window to check)
+* [Java](https://java.com/en/download/help/download_options.xml) (and make sure its on your system path. Type java in your terminal or command line window to check)
 * [Php >= 7.2 ](https://www.php.net/downloads.php)
 * [Composer](https://getcomposer.org/doc/00-intro.md) 
 * [Chrome](https://www.google.com/chrome/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/) or any other browser you want to test on (given you have the drivers)
 
 ### 1. Install
 
-To get started using WPselenium install it using composer using the following command:-
+To get started with WPselenium install it using composer using the following command:-
 
 `composer require --dev devchid/wpselenium`
 
@@ -61,7 +61,7 @@ You will need to replace siteUrl, with you own site you are trying to test.
 > Note:- The WPSelenium.xml embeds the phpunit config, using the phpunit endpoint. This specified config is what is loaded when testing your project with phpunit. This means you can specific any config you would for phpunit in under this config item.
  
 ### 3. Run Tests
-After this previous step you are in essence done. You can the following command from the same location as your `composer.json` file (were browser_driver can either be chrome or firefox)
+After this previous step you are in essence done. You can run the following command from the same location as your `composer.json` file (were browser_driver can either be chrome or firefox)
 
 `/vendor/bin/wpselenium [brower_driver]`
 
@@ -81,7 +81,7 @@ If you managed to see the home page of your site like the above example, everyth
 
 ## WordPress Support
 
-WPSelenium comes with inbuilt support for WordPress sites. This is particularly useful when building custom plugins or themes that might requuire UI testing. Please see [documentation site](http://wpselenium.devchid.com/) for more details.
+WPSelenium comes with inbuilt support for WordPress sites. This is particularly useful when building custom plugins or themes that might require UI testing. Please see [documentation site](http://wpselenium.devchid.com/) for more details.
 
 
 ## Documentation
@@ -90,7 +90,7 @@ The WPSelenium library is fully documented at [http://wpselenium.devchid.com/](h
 
 ## Contributing
 
-WPooW is an opensource project and contributions are valued. 
+WPSelenium is an opensource project and contributions are valued. 
 
 If you are contributing a bug fix, please create a pull request with the following details
 
