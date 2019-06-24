@@ -3,19 +3,31 @@
 namespace WPSelenium;
 
 use \PHPUnit\Framework\TestCase;
+use \PHPUnit\Util\Test;
 use \Facebook\WebDriver\Remote\RemoteWebDriver;
 use \Facebook\WebDriver\Remote\DesiredCapabilities;
+use WPSelenium\Utilities\CONSTS;
+use PHPUnit\Framework\Constraint\Exception;
 
 abstract class WPSTestCase extends TestCase{
 
-    function setUpWPSite(){}
-
+    
     private static $seleniumDriver;
+
+    public static function setUpWPSite(){
+        $Annotations = Test::parseTestMethodAnnotations(get_called_class(), getenv("CURRENT_WPSELENIUM_TEST"));
+        if (array_key_exists(CONSTS::ANNOTATION_WP_BEFRE_RUN, $Annotations)){
+            self::{$Annotations[CONSTS::ANNOTATION_WP_BEFRE_RUN]}();
+        }
+    }
+
+    public function setUp() {
+        putenv("CURRENT_WPSELENIUM_TEST=".$this->getName());
+    }
 
     protected function GetSeleniumDriver(){
         if (self::$seleniumDriver == null){
             $hosturl = sprintf("http://localhost:%s/wd/hub", getenv('WPSELENIUM_TEST_PORT'));
-            //Note: Report bug. Unable to catch exception when this fails
             self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::{getenv('WPSELENIUM_DRIVER')}());    
             }
         return self::$seleniumDriver;

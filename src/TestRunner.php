@@ -17,8 +17,9 @@ class TestRunner{
     function __construct()
     {
         $this->wpSeleniumConfig = WPSeleniumConfig::Get();
+        $this->wpTempTestsJsonPath = sprintf("%s%s..%s%s", __DIR__, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, CONSTS::WPSELENIUM_TEMP_TEST_FILE);
 
-        $fp = fopen(sprintf("%s%s%s", __DIR__, DIRECTORY_SEPARATOR, CONSTS::WPSELENIUM_TEMP_TEST_FILE), 'w');
+        $fp = fopen($this->wpTempTestsJsonPath, 'w');
         fwrite($fp,json_encode( $this->wpSeleniumConfig->GetTestFiles()));
         fclose($fp);
         $this->StartSeleniumServer();
@@ -33,7 +34,8 @@ class TestRunner{
         putenv('WPSELENIUM_TEST_SITE=' . $this->wpSeleniumConfig->GetSiteURL() );
         putenv('WPSELENIUM_DRIVER=' . $this->wpSeleniumConfig->GetBroswerDriver() );
         putenv('WPSELENIUM_TEST_PORT=' . $this->wpSeleniumConfig->GetSeleniumRunPort() );
-        
+        putenv('WPSELENIUM_TEMP_TESTS_JSON_PATH=' . "sdfs" );
+
         //adding sleep command to give time for the command to full run/programs exceute
         sleep(1);
         # 3. Starting Selenium

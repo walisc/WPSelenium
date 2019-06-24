@@ -118,4 +118,10 @@ class Utilities{
         } 
         closedir($dir); 
     } 
+
+    public static function GetCallingMethod(){
+        $e = new \Exception();
+        $trace = $e->getTrace();
+        return $trace[1]; //0 current
+    }
 }
