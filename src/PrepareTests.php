@@ -20,8 +20,6 @@ class PrepareTests {
             }
         }
 
-        
-
         $composerPath = dirname(Utilities::GetCallingMethod()['file']) . DIRECTORY_SEPARATOR .  "composer.json";
         
  

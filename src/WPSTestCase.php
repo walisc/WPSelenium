@@ -15,14 +15,29 @@ abstract class WPSTestCase extends TestCase{
     private static $seleniumDriver;
 
     public static function setUpWPSite(){
-        $Annotations = Test::parseTestMethodAnnotations(get_called_class(), getenv("CURRENT_WPSELENIUM_TEST"));
-        if (array_key_exists(CONSTS::ANNOTATION_WP_BEFRE_RUN, $Annotations)){
-            self::{$Annotations[CONSTS::ANNOTATION_WP_BEFRE_RUN]}();
+        $currentTestPath = sprintf('%s%s%s', __DIR__, DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file');
+        if (file_exists($currentTestPath))
+        {
+            $myfile = fopen($currentTestPath, 'r');
+            $current_wp_selenium_test =  fgets($myfile);
+            fclose($myfile);
+
+            $MethodAnnotations = Test::parseTestMethodAnnotations(get_called_class(), $current_wp_selenium_test)['method'];
+            if (array_key_exists(CONSTS::ANNOTATION_WP_BEFORE_RUN, $MethodAnnotations)){
+                if (method_exists(get_called_class(),$MethodAnnotations[CONSTS::ANNOTATION_WP_BEFORE_RUN][0] )){
+                    get_called_class()::{$MethodAnnotations[CONSTS::ANNOTATION_WP_BEFORE_RUN][0]}();
+                }
+                
+            }
         }
     }
 
+    // TODO: Change this to beforeCreateClass and map
+    // TODO: Create a temp folder. Add to WPSeleniumTest there
     public function setUp() {
-        putenv("CURRENT_WPSELENIUM_TEST=".$this->getName());
+        $fp = fopen(sprintf('%s%s%s', __DIR__, DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
+        fwrite($fp,$this->getName());
+        fclose($fp);
     }
 
     protected function GetSeleniumDriver(){

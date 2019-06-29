@@ -13,7 +13,6 @@ class WPSeleniumConfig{
     private $wpSeleniumPathDir;
     private $wpSeleniumProvisionConfig;
     private $selectedBrowserDriver;
-    private $binDirectory;
     private $phpUnitPath;
     private $phpUnitConfig;
     private $phpUnitConfigPath;
@@ -27,7 +26,7 @@ class WPSeleniumConfig{
     {
         $this->configFilePathFilePath = $configFilePathFilePath;
         $this->wpSeleniumPathDir = $wpSeleniumPathDir;
-        $this->binDirectory = sprintf("%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "bin");
+
         $this->phpUnitPath = sprintf("%s%s%s%s%s%s%s", dirname($configFilePathFilePath), DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "bin", DIRECTORY_SEPARATOR, "phpunit" );
         $this->phpUnitConfigPath = sprintf("%s%s%s", dirname($configFilePathFilePath), DIRECTORY_SEPARATOR, "phpunit.xml");
         $this->parsedConfig=simplexml_load_file($configFilePathFilePath);
@@ -181,15 +180,24 @@ class WPSeleniumConfig{
         return $this->selectedBrowserDriver;
     }
 
-    public function GetBinDirectory(){
-        return $this->binDirectory;
+    public static function GetBinDirectory(){
+
+        $binDirectory = sprintf("%s%s..%s%s", __DIR__, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, "bin");
+        if (!file_exists($binDirectory)){ mkdir($binDirectory);}
+        return $binDirectory;
+    }
+
+    public static function GetTempDirectory(){
+        $tempDirectory = sprintf("%s%s..%s%s", __DIR__ ,  DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, "temp");
+        if (!file_exists($tempDirectory)){ mkdir($tempDirectory);}
+        return $tempDirectory;
     }
 
     public function GetSeleniumServerPath(){
-        return sprintf("%s%s%s", $this->binDirectory , DIRECTORY_SEPARATOR, "seleniumServer.jar");
+        return sprintf("%s%s%s", $this->GetBinDirectory() , DIRECTORY_SEPARATOR, "seleniumServer.jar");
     }
     public function GetSeleniumCompressedDriverPath(){
-        return  sprintf("%s%s%s", $this->binDirectory , DIRECTORY_SEPARATOR, sprintf("%sDriverCompressed",  $this->selectedBrowserDriver ));
+        return  sprintf("%s%s%s", $this->GetBinDirectory() , DIRECTORY_SEPARATOR, sprintf("%sDriverCompressed",  $this->selectedBrowserDriver ));
     }
 
     public function GetSeleniumRunPort(){
