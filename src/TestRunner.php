@@ -34,7 +34,8 @@ class TestRunner{
         putenv('WPSELENIUM_TEST_SITE=' . $this->wpSeleniumConfig->GetSiteURL() );
         putenv('WPSELENIUM_DRIVER=' . $this->wpSeleniumConfig->GetBroswerDriver() );
         putenv('WPSELENIUM_TEST_PORT=' . $this->wpSeleniumConfig->GetSeleniumRunPort() );
-        putenv('WPSELENIUM_TEMP_TESTS_JSON_PATH=' . "sdfs" );
+        putenv('WPSELENIUM_WP_TEST_USERNAME=' . $this->wpSeleniumConfig->GetWPTestUsername() );
+        putenv('WPSELENIUM_WP_TEST_PASSWORD=' .  $this->wpSeleniumConfig->GetWPTestPassword());
 
         //adding sleep command to give time for the command to full run/programs exceute
         sleep(1);

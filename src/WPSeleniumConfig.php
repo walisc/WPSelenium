@@ -152,8 +152,8 @@ class WPSeleniumConfig{
         return $this->parsedConfig->wpTestUsername;
     }
 
-    public function GetWPTestPassowrd(){
-        return $this->parsedConfig->wpTestUserPassword;
+    public function GetWPTestPassword(){
+        return $this->parsedConfig->wpTestPassword;
     }
 
     public function GetPhpUnitConfig(){

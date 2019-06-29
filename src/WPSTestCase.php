@@ -2,6 +2,7 @@
 
 namespace WPSelenium;
 
+use Facebook\WebDriver\WebDriverBy;
 use \PHPUnit\Framework\TestCase;
 use \PHPUnit\Util\Test;
 use \Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -33,8 +34,6 @@ abstract class WPSTestCase extends TestCase{
         }
     }
 
-    // TODO: Change this to beforeCreateClass and map
-    // TODO: Create a temp folder. Add to WPSeleniumTest there
     public function setUp() {
         $fp = fopen(sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
         fwrite($fp,$this->getName());
@@ -47,6 +46,22 @@ abstract class WPSTestCase extends TestCase{
             self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::{getenv('WPSELENIUM_DRIVER')}());    
             }
         return self::$seleniumDriver;
+    }
+
+    protected function loginToWPAdmin(){
+        $driver = $this->GetSeleniumDriver();
+        $driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
+
+        $usernameField = $driver->findElement(WebDriverby::id('user_login'));
+        $passwordField = $driver->findElement(WebDriverby::id('user_pass'));
+        $loginButton = $driver->findElement(WebDriverby::id('wp-submit'));
+
+
+        $usernameField->click();
+        $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
+        $passwordField->click();
+        $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
+        $loginButton->click();
     }
 
     public function GetTestSite(){
