@@ -28,7 +28,7 @@ class PrepareTests {
 
             if (array_key_exists('repositories',$composerJSONFile ))
             {
-                $decodedTestFile = json_decode(file_get_contents($composerJSONFile["repositories"][0]["url"] . DIRECTORY_SEPARATOR .  CONSTS::WPSELENIUM_TEMP_TEST_FILE, true), true);
+                $decodedTestFile = json_decode(file_get_contents(WPSeleniumConfig::GetTempDirectory() . DIRECTORY_SEPARATOR .  CONSTS::WPSELENIUM_TEMP_TEST_FILE, true), true);
                
                 foreach($decodedTestFile[CONSTS::WPSELENIUM_TEMP_TEST_DIR_KEY] as $decodedTestDir){
                     if (file_exists($decodedTestDir)){

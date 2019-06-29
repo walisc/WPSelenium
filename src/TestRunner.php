@@ -17,7 +17,7 @@ class TestRunner{
     function __construct()
     {
         $this->wpSeleniumConfig = WPSeleniumConfig::Get();
-        $this->wpTempTestsJsonPath = sprintf("%s%s..%s%s", __DIR__, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, CONSTS::WPSELENIUM_TEMP_TEST_FILE);
+        $this->wpTempTestsJsonPath = sprintf("%s%s%s", $this->wpSeleniumConfig->GetTempDirectory(), DIRECTORY_SEPARATOR, CONSTS::WPSELENIUM_TEMP_TEST_FILE);
 
         $fp = fopen($this->wpTempTestsJsonPath, 'w');
         fwrite($fp,json_encode( $this->wpSeleniumConfig->GetTestFiles()));

@@ -8,6 +8,7 @@ use \Facebook\WebDriver\Remote\RemoteWebDriver;
 use \Facebook\WebDriver\Remote\DesiredCapabilities;
 use WPSelenium\Utilities\CONSTS;
 use PHPUnit\Framework\Constraint\Exception;
+use WPSelenium\WPSeleniumConfig;
 
 abstract class WPSTestCase extends TestCase{
 
@@ -15,7 +16,7 @@ abstract class WPSTestCase extends TestCase{
     private static $seleniumDriver;
 
     public static function setUpWPSite(){
-        $currentTestPath = sprintf('%s%s%s', __DIR__, DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file');
+        $currentTestPath = sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file');
         if (file_exists($currentTestPath))
         {
             $myfile = fopen($currentTestPath, 'r');
@@ -35,7 +36,7 @@ abstract class WPSTestCase extends TestCase{
     // TODO: Change this to beforeCreateClass and map
     // TODO: Create a temp folder. Add to WPSeleniumTest there
     public function setUp() {
-        $fp = fopen(sprintf('%s%s%s', __DIR__, DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
+        $fp = fopen(sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
         fwrite($fp,$this->getName());
         fclose($fp);
     }
