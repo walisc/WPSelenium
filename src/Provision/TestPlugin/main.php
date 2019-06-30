@@ -12,30 +12,48 @@ defined( 'ABSPATH') or die('Accessing this is disallowed');
 
 add_action( 'wp_ajax_nopriv_wpselenium_testing_request', 'wpselenium_testing_request' );
 
-function wpselenium_testing_request(){
+$composerFile = sprintf("%s%scomposer.json", __DIR__ , DIRECTORY_SEPARATOR);
 
-    $wpselenium_linked = false;
-    if (file_exists( sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php")))
-    {
-        include sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
-        if (class_exists("WPSelenium\PrepareTests")){
-            $wpselenium_linked = true;
+function get_test_project_location(){
+
+    global $composerFile;
+    if (file_exists($composerFile)) {
+        $composerJSONFile = json_decode(file_get_contents($composerFile, true), true);
+
+        if (array_key_exists('repositories', $composerJSONFile)) {
+            // need to do this because of potential symbolic links
+            $testProjectLocArray = explode('/', $composerJSONFile['repositories'][0]['url']);
+            $testProjectLocArray = array_slice($testProjectLocArray, 0, count($testProjectLocArray) - 3);
+            return implode(DIRECTORY_SEPARATOR, $testProjectLocArray);
         }
     }
-    
+    return null;
+}
+
+function check_wpselenium_can_load(){
+    $testProjectLoc = get_test_project_location();
+    if ($testProjectLoc != null) {
+        include_once sprintf("%s%s%s%s%s", $testProjectLoc, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
+        if (class_exists("WPSelenium\PrepareTests")) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function wpselenium_testing_request(){
+
     echo json_encode([
         "pluginPathDir" => __DIR__,
-        "WPSeleniumLinked" => $wpselenium_linked 
+        "WPSeleniumLinked" =>  check_wpselenium_can_load()
     ]);
 
 }
 
-if (file_exists( sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php")))
+
+
+if (check_wpselenium_can_load())
 {
-    include sprintf("%s%s%s%s%s", __DIR__, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
-    if (class_exists("WPSelenium\PrepareTests")){
-        include_once 'vendor/autoload.php';
-        \WPSelenium\PrepareTests::CreateTestElements();
-    }
+    \WPSelenium\PrepareTests::CreateTestElements();
 }
 

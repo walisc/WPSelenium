@@ -23,7 +23,7 @@ abstract class WPSTestCase extends TestCase{
             $myfile = fopen($currentTestPath, 'r');
             $current_wp_selenium_test =  fgets($myfile);
             fclose($myfile);
-
+            //TODO: Docment of erro dont use test on WP_Before method
             $MethodAnnotations = Test::parseTestMethodAnnotations(get_called_class(), $current_wp_selenium_test)['method'];
             if (array_key_exists(CONSTS::ANNOTATION_WP_BEFORE_RUN, $MethodAnnotations)){
                 if (method_exists(get_called_class(),$MethodAnnotations[CONSTS::ANNOTATION_WP_BEFORE_RUN][0] )){
@@ -72,7 +72,7 @@ abstract class WPSTestCase extends TestCase{
         return getenv('WPSELENIUM_DRIVER');
     }
 
-    function __destruct()
+    static function tearDownAfterClass()
     {
         if (self::$seleniumDriver != null){
         self::$seleniumDriver->quit();

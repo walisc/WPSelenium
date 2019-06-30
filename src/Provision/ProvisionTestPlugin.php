@@ -23,7 +23,7 @@ class ProvisionTestPlugin{
         $ds = DIRECTORY_SEPARATOR;
         $this->sitePath = WPSeleniumConfig::Get()->GetSitePath();
         $this->siteUrl = WPSeleniumConfig::Get()->GetSiteUrl();
-        $this->wpSeleniumPathDir = WPSeleniumConfig::Get()->GetWPSeleniumDir();
+        $this->wpSeleniumPathDir = WPSeleniumConfig::Get()->GetWPSeleniumWorkingDir();
         $this->wpSeleniumPluginPath = sprintf("%s{$ds}TestPlugin", __DIR__);
         $this->wpSeleniumPluginInstallPath = "{$this->sitePath}{$ds}wp-content{$ds}plugins{$ds}WPSeleniumTestPlugin";
 
@@ -45,7 +45,6 @@ class ProvisionTestPlugin{
     
                 fwrite(fopen($testPluginPath."composer.json", "w") , json_encode($testPluginDetails));
                 echo "\n";
-                exec("composer install -d ". $resultDic["pluginPathDir"]);
                 Logger::INFO("WPSelenium linked to site successfully");
             }
             else{
