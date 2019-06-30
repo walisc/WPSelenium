@@ -16,27 +16,10 @@ abstract class WPSTestCase extends TestCase{
     
     private static $seleniumDriver;
 
-    public static function setUpWPSite(){
-        $currentTestPath = sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file');
-        if (file_exists($currentTestPath))
-        {
-            $myfile = fopen($currentTestPath, 'r');
-            $current_wp_selenium_test =  fgets($myfile);
-            fclose($myfile);
-            //TODO: Docment of erro dont use test on WP_Before method
-            $MethodAnnotations = Test::parseTestMethodAnnotations(get_called_class(), $current_wp_selenium_test)['method'];
-            if (array_key_exists(CONSTS::ANNOTATION_WP_BEFORE_RUN, $MethodAnnotations)){
-                if (method_exists(get_called_class(),$MethodAnnotations[CONSTS::ANNOTATION_WP_BEFORE_RUN][0] )){
-                    get_called_class()::{$MethodAnnotations[CONSTS::ANNOTATION_WP_BEFORE_RUN][0]}();
-                }
-                
-            }
-        }
-    }
 
     public function setUp() {
         $fp = fopen(sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
-        fwrite($fp,$this->getName());
+        fwrite($fp,sprintf('%s;%s;%s' , (new \ReflectionClass(get_class($this)))->getFileName(), get_class($this), $this->getName()));
         fclose($fp);
     }
 
@@ -48,9 +31,24 @@ abstract class WPSTestCase extends TestCase{
         return self::$seleniumDriver;
     }
 
+    protected function getWebPage($url){
+        $driver = $this->GetSeleniumDriver();
+        $driver->Get($url);
+        $this->waitForPageToLoad();
+    }
+
+    protected function waitForPageToLoad(){
+        $driver = $this->GetSeleniumDriver();
+        $driver->wait()->until(
+            $driver->executeScript('return document.readyState') == 'complete'
+        );
+    }
+
     protected function loginToWPAdmin(){
+        //TODO: Check if wpsite first
         $driver = $this->GetSeleniumDriver();
         $driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
+
 
         $usernameField = $driver->findElement(WebDriverby::id('user_login'));
         $passwordField = $driver->findElement(WebDriverby::id('user_pass'));
@@ -62,6 +60,8 @@ abstract class WPSTestCase extends TestCase{
         $passwordField->click();
         $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
         $loginButton->click();
+
+        $this->waitForPageToLoad();
     }
 
     public function GetTestSite(){

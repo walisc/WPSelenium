@@ -21,10 +21,7 @@ function get_test_project_location(){
         $composerJSONFile = json_decode(file_get_contents($composerFile, true), true);
 
         if (array_key_exists('repositories', $composerJSONFile)) {
-            // need to do this because of potential symbolic links
-            $testProjectLocArray = explode('/', $composerJSONFile['repositories'][0]['url']);
-            $testProjectLocArray = array_slice($testProjectLocArray, 0, count($testProjectLocArray) - 3);
-            return implode(DIRECTORY_SEPARATOR, $testProjectLocArray);
+            return $composerJSONFile['repositories'][0]['url'];
         }
     }
     return null;
@@ -34,7 +31,7 @@ function check_wpselenium_can_load(){
     $testProjectLoc = get_test_project_location();
     if ($testProjectLoc != null) {
         include_once sprintf("%s%s%s%s%s", $testProjectLoc, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
-        if (class_exists("WPSelenium\PrepareTests")) {
+        if (class_exists("WPSelenium\WPSupport")) {
             return true;
         }
     }
@@ -54,6 +51,6 @@ function wpselenium_testing_request(){
 
 if (check_wpselenium_can_load())
 {
-    \WPSelenium\PrepareTests::CreateTestElements();
+    \WPSelenium\WPSupport::RunBeforeTestsFunctions();
 }
 
