@@ -65,7 +65,7 @@ class TestRunner{
         Logger::INFO("---- Running WPSelenium Tests---- \n\n");
         system($this->wpSeleniumConfig->GetPhpUnitPath());
         Logger::INFO("---- Completed Running WPSelenium Tests. Shutting Down.---- \n\n");
-        sleep(1);
+        sleep(2);
         Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");
         sleep(2);
         

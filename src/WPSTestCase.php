@@ -2,14 +2,11 @@
 
 namespace WPSelenium;
 
-use Facebook\WebDriver\WebDriverBy;
 use \PHPUnit\Framework\TestCase;
-use \PHPUnit\Util\Test;
+use Facebook\WebDriver\WebDriverBy;
 use \Facebook\WebDriver\Remote\RemoteWebDriver;
 use \Facebook\WebDriver\Remote\DesiredCapabilities;
-use WPSelenium\Utilities\CONSTS;
-use PHPUnit\Framework\Constraint\Exception;
-use WPSelenium\WPSeleniumConfig;
+
 
 abstract class WPSTestCase extends TestCase{
 
@@ -40,7 +37,25 @@ abstract class WPSTestCase extends TestCase{
     protected function waitForPageToLoad(){
         $driver = $this->GetSeleniumDriver();
         $driver->wait()->until(
-            $driver->executeScript('return document.readyState') == 'complete'
+            function () use ($driver) {return $driver->executeScript('return document.readyState') == 'complete';}
+        );
+    }
+
+    protected function waitForPageToLoadBasedOnElements($bys){
+        $driver = $this->GetSeleniumDriver();
+        $driver->wait()->until(
+            function () use ($driver, $bys){
+                $foundAll = true;
+                foreach ($bys as $by){
+                    if ($driver->findElement($by) != true)
+                    {
+                        $foundAll = false;
+                        break;
+                    }
+                }
+                return $foundAll;
+            }
+
         );
     }
 
@@ -48,20 +63,22 @@ abstract class WPSTestCase extends TestCase{
         //TODO: Check if wpsite first
         $driver = $this->GetSeleniumDriver();
         $driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
-
-
-        $usernameField = $driver->findElement(WebDriverby::id('user_login'));
-        $passwordField = $driver->findElement(WebDriverby::id('user_pass'));
-        $loginButton = $driver->findElement(WebDriverby::id('wp-submit'));
-
-
-        $usernameField->click();
-        $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
-        $passwordField->click();
-        $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
-        $loginButton->click();
-
         $this->waitForPageToLoad();
+        if(strpos($driver->getCurrentURL(), 'wp-login')) {
+
+            $usernameField = $driver->findElement(WebDriverby::id('user_login'));
+            $passwordField = $driver->findElement(WebDriverby::id('user_pass'));
+            $loginButton = $driver->findElement(WebDriverby::id('wp-submit'));
+
+
+            $usernameField->click();
+            $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
+            $passwordField->click();
+            $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
+            $loginButton->click();
+
+            $this->waitForPageToLoad();
+        }
     }
 
     public function GetTestSite(){
