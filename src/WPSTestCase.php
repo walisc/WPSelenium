@@ -12,12 +12,14 @@ abstract class WPSTestCase extends TestCase{
 
     
     private static $seleniumDriver;
-
+    protected $driver;
 
     public function setUp() {
         $fp = fopen(sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
         fwrite($fp,sprintf('%s;%s;%s' , (new \ReflectionClass(get_class($this)))->getFileName(), get_class($this), $this->getName()));
         fclose($fp);
+        $this->driver = $this->GetSeleniumDriver();
+
     }
 
     protected function GetSeleniumDriver(){
@@ -29,8 +31,7 @@ abstract class WPSTestCase extends TestCase{
     }
 
     protected function getWebPage($url){
-        $driver = $this->GetSeleniumDriver();
-        $driver->Get($url);
+        $this->driver->Get($url);
         $this->waitForPageToLoad();
     }
 
@@ -61,20 +62,18 @@ abstract class WPSTestCase extends TestCase{
 
     protected function loginToWPAdmin(){
         //TODO: Check if wpsite first
-        $driver = $this->GetSeleniumDriver();
-        $driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
+        $this->driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
         $this->waitForPageToLoad();
-        if(strpos($driver->getCurrentURL(), 'wp-login')) {
+        if(strpos($this->driver->getCurrentURL(), 'wp-login')) {
 
-            $usernameField = $driver->findElement(WebDriverby::id('user_login'));
-            $passwordField = $driver->findElement(WebDriverby::id('user_pass'));
-            $loginButton = $driver->findElement(WebDriverby::id('wp-submit'));
-
+            $usernameField = $this->driver->findElement(WebDriverby::id('user_login'));
+            $passwordField = $this->driver->findElement(WebDriverby::id('user_pass'));
+            $loginButton = $this->driver->findElement(WebDriverby::id('wp-submit'));
 
             $usernameField->click();
-            $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
+            $this->driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
             $passwordField->click();
-            $driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
+            $this->driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
             $loginButton->click();
 
             $this->waitForPageToLoad();
