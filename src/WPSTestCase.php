@@ -30,7 +30,7 @@ abstract class WPSTestCase extends TestCase{
         return self::$seleniumDriver;
     }
 
-    protected function getWebPage($url){
+    protected function GetWebPage($url){
         $this->driver->Get($url);
         $this->waitForPageToLoad();
     }
