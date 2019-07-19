@@ -2,6 +2,8 @@
 
 namespace WPSelenium;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use \PHPUnit\Framework\TestCase;
 use Facebook\WebDriver\WebDriverBy;
 use \Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -58,6 +60,23 @@ abstract class WPSTestCase extends TestCase{
             }
 
         );
+    }
+
+    protected function findElementWithWait($elementPath, $parent=null,  $timeoutInSecond = 30, $intervalInMillisecond = 250){
+        $driver = $this->driver;
+
+        $this->driver->wait($timeoutInSecond, $intervalInMillisecond)->until(
+            function () use ($driver, $elementPath, $parent){
+                try{
+                    return  $parent != null ?  $parent->findElement($elementPath) : $driver->findElement($elementPath);
+
+                }
+                catch (NoSuchElementException $e){
+                    return null;
+                }
+            }
+        );
+        return  $parent != null ?  $parent->findElement($elementPath) : $driver->findElement($elementPath);
     }
 
     protected function loginToWPAdmin(){
