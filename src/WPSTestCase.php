@@ -20,11 +20,11 @@ abstract class WPSTestCase extends TestCase{
         $fp = fopen(sprintf('%s%s%s', WPSeleniumConfig::GetTempDirectory(), DIRECTORY_SEPARATOR, 'wp_selenium_current_test_file'), 'w');
         fwrite($fp,sprintf('%s;%s;%s' , (new \ReflectionClass(get_class($this)))->getFileName(), get_class($this), $this->getName()));
         fclose($fp);
-        $this->driver = $this->GetSeleniumDriver();
+        $this->driver = $this->GetSeleniumDriver();;
 
     }
 
-    protected function GetSeleniumDriver(){
+    public function GetSeleniumDriver(){
         if (self::$seleniumDriver == null){
             $hosturl = sprintf("http://localhost:%s/wd/hub", getenv('WPSELENIUM_TEST_PORT'));
             self::$seleniumDriver = RemoteWebDriver::create($hosturl, DesiredCapabilities::{getenv('WPSELENIUM_DRIVER')}());    
@@ -32,19 +32,19 @@ abstract class WPSTestCase extends TestCase{
         return self::$seleniumDriver;
     }
 
-    protected function GetWebPage($url){
+    public function GetWebPage($url){
         $this->driver->Get($url);
         $this->waitForPageToLoad();
     }
 
-    protected function waitForPageToLoad(){
+    public function waitForPageToLoad(){
         $driver = $this->GetSeleniumDriver();
         $driver->wait()->until(
             function () use ($driver) {return $driver->executeScript('return document.readyState') == 'complete';}
         );
     }
 
-    protected function waitForPageToLoadBasedOnElements($bys){
+    public function waitForPageToLoadBasedOnElements($bys){
         $driver = $this->GetSeleniumDriver();
         $driver->wait()->until(
             function () use ($driver, $bys){
@@ -62,13 +62,18 @@ abstract class WPSTestCase extends TestCase{
         );
     }
 
-    protected function findElementWithWait($elementPath, $parent=null,  $timeoutInSecond = 30, $intervalInMillisecond = 250){
+    public function findElementWithWait($elementPath, $parent=null, $shouldBeInteractable=true, $timeoutInSecond = 30, $intervalInMillisecond = 250){
         $driver = $this->driver;
 
         $this->driver->wait($timeoutInSecond, $intervalInMillisecond)->until(
-            function () use ($driver, $elementPath, $parent){
+            function () use ($driver, $elementPath, $parent, $shouldBeInteractable){
                 try{
-                    return  $parent != null ?  $parent->findElement($elementPath) : $driver->findElement($elementPath);
+                    $element =  $parent != null ?  $parent->findElement($elementPath) : $driver->findElement($elementPath);
+                    if (!$shouldBeInteractable){
+                        return $element;
+                    }
+                    $this->driver->executeScript("arguments[0].scrollIntoView(false)", [$element]);
+                    return $element->isDisplayed() ? $element : null;
 
                 }
                 catch (NoSuchElementException $e){
@@ -79,25 +84,7 @@ abstract class WPSTestCase extends TestCase{
         return  $parent != null ?  $parent->findElement($elementPath) : $driver->findElement($elementPath);
     }
 
-    protected function loginToWPAdmin(){
-        //TODO: Check if wpsite first
-        $this->driver->Get(sprintf('%s/wp-admin', $this->GetTestSite()));
-        $this->waitForPageToLoad();
-        if(strpos($this->driver->getCurrentURL(), 'wp-login')) {
 
-            $usernameField = $this->driver->findElement(WebDriverby::id('user_login'));
-            $passwordField = $this->driver->findElement(WebDriverby::id('user_pass'));
-            $loginButton = $this->driver->findElement(WebDriverby::id('wp-submit'));
-
-            $usernameField->click();
-            $this->driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_USERNAME'));
-            $passwordField->click();
-            $this->driver->getKeyboard()->sendKeys(getenv('WPSELENIUM_WP_TEST_PASSWORD'));
-            $loginButton->click();
-
-            $this->waitForPageToLoad();
-        }
-    }
 
     public function GetTestSite(){
         return getenv('WPSELENIUM_TEST_SITE');
