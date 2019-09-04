@@ -68,6 +68,11 @@ class Utilities{
         
     }
 
+
+    static function DownloadFromSvn($url, $filePath){
+        (new Svn())->CheckOut($url, $filePath);
+    }
+
     public static function GetOS(){
         switch (true) {
             case stristr(PHP_OS, 'DAR'): return "dar";

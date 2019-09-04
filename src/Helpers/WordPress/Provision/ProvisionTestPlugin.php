@@ -1,12 +1,14 @@
 <?php
 
-namespace WPSelenium\Provision;
+namespace WPSelenium\Helpers\WordPress\Provision;
+
+use WPSelenium\Helpers\ProvisionInterface;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\WPSeleniumConfig;
 use WPSelenium\Utilities\Requests;
 use WPSelenium\Utilities\Utilities;
 
-class ProvisionTestPlugin{
+class ProvisionTestPlugin implements ProvisionInterface {
 
     private $sitePath;
     private $siteUrl;
@@ -18,7 +20,6 @@ class ProvisionTestPlugin{
     }
     function __construct()
     {
-        if (!WPSeleniumConfig::Get()->IsWordPressSite()){return;}
         
         $ds = DIRECTORY_SEPARATOR;
         $this->sitePath = WPSeleniumConfig::Get()->GetSitePath();

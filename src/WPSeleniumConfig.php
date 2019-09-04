@@ -1,6 +1,7 @@
 <?php
 
 namespace WPSelenium;
+use WPSelenium\Helpers\HelperRegistry;
 use WPSelenium\Utilities\Logger;
 use WPSelenium\Utilities\CONSTS;
 use WPSelenium\Utilities\Utilities;
@@ -19,6 +20,8 @@ class WPSeleniumConfig{
     private $phpUnitConfigPath;
     private $configFilePathFilePath;
     private $testFiles;
+    private $helper;
+
     private static $instance = null;
 
 
@@ -37,7 +40,12 @@ class WPSeleniumConfig{
         Logger::SetLoglevel($this->parsedArgs->getOption('loglevel', true));
         $this->ConfigParse();
         $this->SetUpPhpUintTests();
+        $this->SetUpHelper();
         self::$instance = $this; 
+    }
+
+    private function SetUpHelper(){
+        $this->helper = HelperRegistry::GetHelper($this->parsedArgs->getOption('type'));
     }
 
     private function ConfigParse(){
@@ -94,8 +102,8 @@ class WPSeleniumConfig{
         return self::$instance ;
     }
 
-    public function IsWordPressSite(){
-        return $this->parsedArgs->getOption('wp');
+    public function GetHelper(){
+        return $this->helper;
     }
 
     public function GetSiteURL(){
@@ -149,14 +157,6 @@ class WPSeleniumConfig{
             CONSTS::WPSELENIUM_TEMP_TEST_DIR_KEY => $testDirectories,
             CONSTS::WPSELENIUM_TEMP_TEST_FILE_KEY => $testFiles
         ];
-    }
-
-    public function GetWPTestUsername(){
-        return $this->parsedConfig->wpTestUsername;
-    }
-
-    public function GetWPTestPassword(){
-        return $this->parsedConfig->wpTestPassword;
     }
 
     public function GetPhpUnitConfig(){

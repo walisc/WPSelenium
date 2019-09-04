@@ -16,8 +16,12 @@ if (!file_exists($wpseleniumConfigFile)){
     Logger::ERROR(sprintf("wpselenium.xml config not found. Please ensure that the file existes in the root of your project. Looking in %s", getcwd()), true);
 }
 
-(new WPSeleniumConfig($wpseleniumConfigFile, __DIR__));
+$wpSeleniumConfig = new WPSeleniumConfig($wpseleniumConfigFile, __DIR__);
 
-ProvisionTestPlugin::Provision();
 ProvisionSelenium::Provision();
+
+foreach ($wpSeleniumConfig->GetHelper()->GetProvisionClasses() as $provisionClass){
+    $provisionClass::Provision();
+}
+
 TestRunner::RunTests();

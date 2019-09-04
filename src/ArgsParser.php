@@ -16,8 +16,8 @@ class ArgsParser{
         $this->getOpt->addOperand((new Operand('browser', Operand::REQUIRED))
                     ->setDescription("Brower you want to test on. Chrome and Firefox supported by default. See documenation if you want to add others."));
         $this->getOpt->addOptions([
-            Option::create(null, 'wp', GetOpt::NO_ARGUMENT)
-                ->setDescription("If you are testing a WordPress site. Adds extra features for testing on WordPress."),
+            Option::create(null, 'type', GetOpt::MULTIPLE_ARGUMENT)
+                ->setDescription("The type of site you are testing. e.g --type WordPress"),
             Option::create(null, 'loglevel', GetOpt::MULTIPLE_ARGUMENT)
                 ->setDescription("Console loglevel - info, warn, error, debug."),
             Option::create('?', 'help', GetOpt::NO_ARGUMENT)
