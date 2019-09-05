@@ -46,6 +46,7 @@ class WPSeleniumConfig{
 
     private function SetUpHelper(){
         $this->helper = HelperRegistry::GetHelper($this->parsedArgs->getOption('type'));
+        $this->helper->SetConfig($this);
     }
 
     private function ConfigParse(){
@@ -104,6 +105,10 @@ class WPSeleniumConfig{
 
     public function GetHelper(){
         return $this->helper;
+    }
+
+    public function GetParsedConfig(){
+        return $this->parsedConfig;
     }
 
     public function GetSiteURL(){

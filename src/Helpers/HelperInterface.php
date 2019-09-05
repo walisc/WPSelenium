@@ -3,10 +3,9 @@
 
 namespace WPSelenium\Helpers;
 
-use WPSelenium\Utilities\PhpUnit\Runner;
-
 interface HelperInterface{
     function GetProvisionClasses();
-    function PhpRunner(Runner $PhpUnitRunner);
+    function PhpUnitRunner($phpUnitPath);
+    function SetEnvVariables();
     function SetConfig($WPSeleniumConfig);
 }

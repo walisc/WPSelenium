@@ -3,6 +3,7 @@
 namespace WPSelenium\Helpers\WordPress;
 
 use WPSelenium\Helpers\ConfigInterface;
+use WPSelenium\Utilities\Logger;
 
 class Config implements ConfigInterface {
 
@@ -15,6 +16,9 @@ class Config implements ConfigInterface {
         self::$instance = $this;
     }
 
+    /**
+     * @return Config
+     */
     static function Get(){
         if (self::$instance == null){
             Logger::ERROR("Hmm...Thats strange. Are you tring to access the  config object without configuring it first", true);
@@ -23,11 +27,11 @@ class Config implements ConfigInterface {
     }
 
     public function GetWPTestUsername(){
-        return $this->wpSeleniumConfig->parsedConfig->wpTestUsername;
+        return $this->wpSeleniumConfig->GetParsedConfig()->wpTestUsername;
     }
 
     public function GetWPTestPassword(){
-        return $this->wpSeleniumConfig->parsedConfig->wpTestPassword;
+        return $this->wpSeleniumConfig->GetParsedConfig()->wpTestPassword;
     }
 
 }

@@ -22,20 +22,22 @@ class TestRunner{
         $fp = fopen($this->wpTempTestsJsonPath, 'w');
         fwrite($fp,json_encode( $this->wpSeleniumConfig->GetTestFiles()));
         fclose($fp);
+        $this->SetEnvironmentVariables();
         $this->StartSeleniumServer();
         $this->StartWPSeleniumTests();
         $this->CleanUp();
     }
 
-    function StartSeleniumServer(){
-    
-        Logger::INFO("Setting Enviroment variables");
+    function SetEnvironmentVariables(){
+        Logger::INFO("Setting Environment variables");
         putenv('PATH=' . getenv('PATH') . PATH_SEPARATOR . $this->wpSeleniumConfig->GetBinDirectory());
         putenv('WPSELENIUM_TEST_SITE=' . $this->wpSeleniumConfig->GetSiteURL() );
         putenv('WPSELENIUM_DRIVER=' . $this->wpSeleniumConfig->GetBroswerDriver() );
         putenv('WPSELENIUM_TEST_PORT=' . $this->wpSeleniumConfig->GetSeleniumRunPort() );
-        putenv('WPSELENIUM_WP_TEST_USERNAME=' . $this->wpSeleniumConfig->GetWPTestUsername() );
-        putenv('WPSELENIUM_WP_TEST_PASSWORD=' .  $this->wpSeleniumConfig->GetWPTestPassword());
+        $this->wpSeleniumConfig->GetHelper()->SetEnvVariables();
+
+    }
+    function StartSeleniumServer(){
 
         //adding sleep command to give time for the command to full run/programs exceute
         sleep(1);
@@ -63,7 +65,7 @@ class TestRunner{
         }
         
         Logger::INFO("---- Running WPSelenium Tests---- \n\n");
-        system($this->wpSeleniumConfig->GetPhpUnitPath());
+        $this->wpSeleniumConfig->GetHelper()->PhpUnitRunner($this->wpSeleniumConfig->GetPhpUnitPath());
         Logger::INFO("---- Completed Running WPSelenium Tests. Shutting Down.---- \n\n");
         sleep(2);
         //Requests::Get("http://localhost:{$this->wpSeleniumConfig->GetSeleniumRunPort()}/extra/LifecycleServlet?action=shutdown");

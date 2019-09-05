@@ -8,11 +8,21 @@ class Loader implements HelperInterface{
 
     function GetProvisionClasses()
     {
-        // TODO: Implement GetProvisionClasses() method.
+        return [];
     }
 
-    function PhpRunner(\WPSelenium\Utilities\PhpUnit\Runner $runner)
+    function SetEnvVariables()
     {
-        // TODO: Implement PhpRunner() method.
+        // TODO: Implement SetEnvVariables() method.
+    }
+
+    function PhpUnitRunner($phpUnitPath)
+    {
+        system($phpUnitPath);
+    }
+
+    function SetConfig($WPSeleniumConfig)
+    {
+        // TODO: Implement SetConfig() method.
     }
 }
