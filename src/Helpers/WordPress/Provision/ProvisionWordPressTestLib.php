@@ -19,5 +19,6 @@ class ProvisionWordPressTestLib implements ProvisionInterface{
 //            Logger::WARN("Svn doesnt seem to be installed. This mean we can not download the WordPress Test Library which add extra functionality. You should still be able to run you though");
 //            return;
 //        }
+        //TODO: HAve version file and check if new delete
     }
 }

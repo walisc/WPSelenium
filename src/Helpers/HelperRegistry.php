@@ -7,7 +7,7 @@ use WPSelenium\Utilities\Logger;
 class HelperRegistry{
 
      private static $helpers = [
-         'wp' => 'WPSelenium\Helpers\WordPress\Loader',
+         'wordpress' => 'WPSelenium\Helpers\WordPress\Loader',
          'standard' => 'WPSelenium\Helpers\Standard\Loader'
      ];
 

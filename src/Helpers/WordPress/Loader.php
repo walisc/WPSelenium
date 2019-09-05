@@ -3,12 +3,14 @@
 namespace WPSelenium\Helpers\WordPress;
 
 use WPSelenium\Helpers\HelperInterface;
+use WPSelenium\Helpers\WordPress\PhpUnitRunner\Runner;
 use WPSelenium\Helpers\WordPress\Provision\ProvisionTestPlugin;
 use WPSelenium\Helpers\WordPress\Provision\ProvisionWordPressTestLib;
 
 class Loader implements HelperInterface{
 
     function SetEnvVariables(){
+        putenv('WPSELENIUM_WP_SITE_PATH=' .Config::Get()->GetWpSeleniumConfig()->GetSitePath() );
         putenv('WPSELENIUM_WP_TEST_USERNAME=' . Config::Get()->GetWPTestUsername() );
         putenv('WPSELENIUM_WP_TEST_PASSWORD=' .  Config::Get()->GetWPTestPassword());
     }
@@ -21,9 +23,9 @@ class Loader implements HelperInterface{
         ];
     }
 
-    function PhpUnitRunner($phpUnitPath)
+    function PhpUnitRunner($phpUnitPath, $options=[])
     {
-        system($phpUnitPath);
+        (new Runner())->Run($phpUnitPath, $options);
     }
 
     function SetConfig($WPSeleniumConfig){
