@@ -16,13 +16,13 @@ class Loader implements HelperInterface{
         // TODO: Implement SetEnvVariables() method.
     }
 
-    function PhpUnitRunner($phpUnitPath)
-    {
-        system($phpUnitPath);
-    }
-
     function SetConfig($WPSeleniumConfig)
     {
         // TODO: Implement SetConfig() method.
+    }
+
+    function PhpUnitRunner($phpUnitPath, $options = [])
+    {
+        system($phpUnitPath);
     }
 }

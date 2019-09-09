@@ -13,13 +13,18 @@ class HelperRegistry{
 
      static function GetHelper($helperKey)
      {
-         if (count($helperKey) > 0 && array_key_exists($helperKey[0], self::$helpers)){
-             $helper = self::$helpers[$helperKey[0]];
+         $setHelperKey = 'standard';
+
+         if (count($helperKey) > 0){
+             if (array_key_exists($helperKey[0], self::$helpers)) {
+                 $setHelperKey = $helperKey[0];
+             }
+             else{
+                 Logger::WARN('Could not find the helper class %s. Using the default instead', $helperKey[0] );
+             }
          }
-         else{
-             Logger::WARN('Could not find the helper class %s. Using the default instead');
-             $helper = self::$helpers['standard'];
-         }
+
+         $helper = self::$helpers[$setHelperKey];
 
          if (class_exists($helper)){
              return new $helper();
