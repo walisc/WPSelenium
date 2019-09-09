@@ -20,7 +20,6 @@ class ProvisionTestPlugin implements ProvisionInterface {
     }
     function __construct()
     {
-        
         $ds = DIRECTORY_SEPARATOR;
         $this->sitePath = WPSeleniumConfig::Get()->GetSitePath();
         $this->siteUrl = WPSeleniumConfig::Get()->GetSiteUrl();
@@ -62,8 +61,7 @@ class ProvisionTestPlugin implements ProvisionInterface {
         Logger::INFO("Copying WPSelenium Test Plugin to your site");
         Utilities::RecursiveCopy($this->wpSeleniumPluginPath, $this->wpSeleniumPluginInstallPath );
 
-        Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium tests succesfully. 
-        For security reasons, the plugin has not been activated. Please login to your WordPress site and activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.", true);
+        Logger::INFO("We are getting there:) WPSelenium has just installed the WPSelenium Test Plugin to your site. This is needed to run your selenium tests successfully. Please login to your WordPress site and activate the WPSelenium Test Plugin. Once you have activated it re-run wpselenium.", true);
         
     }
 }

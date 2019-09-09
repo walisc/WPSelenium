@@ -15,7 +15,7 @@ class CONSTS{
     CONST SUPPORTED_DRIVERS_CHROME = "chrome";
     CONST SUPPORTED_DRIVERS_FIREFOX = "firefox";
 
-    CONST ANNOTATION_WP_BEFORE_RUN = "WP_BeforeRun";
+    CONST ANNOTATION_WP_BEFORE_RUN = "wpBeforeRun";
 
     CONST IS_PHPUNIT_SAMPLE_CONFIG = "wpselenium_sample_test";
 }

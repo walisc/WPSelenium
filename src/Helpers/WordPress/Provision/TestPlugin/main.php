@@ -31,7 +31,7 @@ function check_wpselenium_can_load(){
     $testProjectLoc = get_test_project_location();
     if ($testProjectLoc != null) {
         include_once sprintf("%s%s%s%s%s", $testProjectLoc, DIRECTORY_SEPARATOR, "vendor", DIRECTORY_SEPARATOR, "autoload.php");
-        if (class_exists("WPSelenium\WPSupport")) {
+        if (class_exists("WPSelenium\Helpers\WordPress\WPSupport")) {
             return true;
         }
     }
@@ -51,6 +51,6 @@ function wpselenium_testing_request(){
 
 if (check_wpselenium_can_load())
 {
-    \WPSelenium\WPSupport::RunBeforeTestsFunctions();
+    \WPSelenium\Helpers\WordPress\WPSupport::RunBeforeTestsFunctions();
 }
 

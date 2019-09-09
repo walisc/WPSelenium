@@ -4,8 +4,9 @@
 namespace WPSelenium\Helpers;
 
 interface HelperInterface{
-    function GetProvisionClasses();
-    function PhpUnitRunner($phpUnitPath, $options=[]);
-    function SetEnvVariables();
+    // Lifecycle SetConfig -> GetProvisionClasses ->  SetEnvVariables -> PhpUnitRunner
     function SetConfig($WPSeleniumConfig);
+    function GetProvisionClasses();
+    function SetEnvVariables();
+    function PhpUnitRunner($phpUnitPath, $options=[]);
 }
