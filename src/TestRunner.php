@@ -55,8 +55,8 @@ class TestRunner{
     function StartWPSeleniumTests(){
         $phpunitConfig = $this->wpSeleniumConfig->GetPhpUnitConfig();
         $phpunitConfigPath = $this->wpSeleniumConfig->GetPhpUnitConfigPath();
-        
-        if (!file_exists($phpunitConfigPath) || (file_exists($phpunitConfigPath) && !$phpunitConfig["isSample"])){
+
+        if ($phpunitConfig['configType'] == CONSTS::PHPUNIT_CONFIG_TYPE_WPSELENIUM_CONFIG || $phpunitConfig['configType'] == CONSTS::PHPUNIT_CONFIG_TYPE_WPSELENIUM_SAMPLE ){
             $doc = new \DOMDocument("1.0", "ISO-8859-15");
             $doc->formatOutput = TRUE;
             $doc->loadXML(($this->wpSeleniumConfig->GetPhpUnitConfig()["config"])->asXML());

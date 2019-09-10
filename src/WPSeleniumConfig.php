@@ -78,20 +78,21 @@ class WPSeleniumConfig{
 
     private function SetUpPhpUintTests(){
         $phpunitConfigPath = $this->GetPhpUnitConfigPath();
-        
-        if (file_exists($phpunitConfigPath)){
-            $phpUnitConfig = simplexml_load_file($phpunitConfigPath);
-            $isSample = array_key_exists(CONSTS::IS_PHPUNIT_SAMPLE_CONFIG, json_decode(json_encode($phpUnitConfig->attributes()),TRUE));
-            $this->phpUnitConfig = [ "isSample" => $isSample,
-                                     "config" => $phpUnitConfig];
-        }
-        else if (empty($this->parsedConfig->phpunit)){
-            $this->phpUnitConfig = [ "isSample" => true,
-                                     "config" => simplexml_load_file(sprintf("%s%s%s%s%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "src", DIRECTORY_SEPARATOR, "Sample", DIRECTORY_SEPARATOR, "sample_phpunit.config.xml"))];
-        }else{
-            $this->phpUnitConfig = [ "isSample" => false,
+
+        if (!empty($this->parsedConfig->phpunit)){
+            $this->phpUnitConfig = [ "configType" => CONSTS::PHPUNIT_CONFIG_TYPE_WPSELENIUM_CONFIG,
                                      "config" => $this->parsedConfig->phpunit];
         }
+        else if (file_exists($phpunitConfigPath)){
+            $phpUnitConfig = simplexml_load_file($phpunitConfigPath);
+            $this->phpUnitConfig = [ "configType" =>  CONSTS::PHPUNIT_CONFIG_TYPE_PHPUNIT_CONFIG,
+                                     "config" => $phpUnitConfig];
+        }
+        else{
+            $this->phpUnitConfig = [ "configType" =>  CONSTS::PHPUNIT_CONFIG_TYPE_WPSELENIUM_SAMPLE,
+                "config" => simplexml_load_file(sprintf("%s%s%s%s%s%s%s", $this->wpSeleniumPathDir, DIRECTORY_SEPARATOR, "src", DIRECTORY_SEPARATOR, "Sample", DIRECTORY_SEPARATOR, "sample_phpunit.config.xml"))];
+        }
+
 
         $this->testFiles = $this->ParseTestDirectories(dirname($this->configFilePathFilePath));
     }
