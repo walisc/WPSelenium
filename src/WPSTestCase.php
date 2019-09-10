@@ -97,7 +97,8 @@ abstract class WPSTestCase extends TestCase{
     static function tearDownAfterClass()
     {
         if (self::$seleniumDriver != null){
-        self::$seleniumDriver->quit();
+            self::$seleniumDriver->quit();
+            self::$seleniumDriver = null;
         }
     }
 }
