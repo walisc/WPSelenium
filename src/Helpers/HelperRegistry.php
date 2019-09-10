@@ -20,7 +20,7 @@ class HelperRegistry{
                  $setHelperKey = $helperKey[0];
              }
              else{
-                 Logger::WARN(sprintf('Could not find the helper class %s. Using the default instead', $helperKey[0] ));
+                 Logger::WARN(sprintf("Could not find the helper class '%s'. Using the default instead", $helperKey[0] ));
              }
          }
 
