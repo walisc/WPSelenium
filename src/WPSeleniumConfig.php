@@ -222,9 +222,9 @@ class WPSeleniumConfig{
 
         switch(Utilities::GetOS()){
             case "linux":
-                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  %s%sseleniumLog.log 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
+                return sprintf("java -jar \"%s\" -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  >  \"%s%sseleniumLog.log\" 2>&1 &",$this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
             case "win":
-                return sprintf("java -jar %s -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > %s%sseleniumLog.log 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
+                return sprintf("java -jar \"%s\" -role node -servlet org.openqa.grid.web.servlet.LifecycleServlet -registerCycle 0 -port %d  > \"%s%sseleniumLog.log\" 2>&1 ", $this->GetSeleniumServerPath(), $this->GetSeleniumRunPort(), dirname($this->configFilePathFilePath), DIRECTORY_SEPARATOR );
         }
 
     }
