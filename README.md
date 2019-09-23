@@ -11,14 +11,14 @@ WPSelenium also includes support for testing WordPress plugins and themes. It do
 Operand browser is required
 
 Usage: vendor/bin/wpselenium <browser>  [options] 
-Example: vendor/bin/wpselenium chrome --type WordPress
+Example: vendor/bin/wpselenium chrome --type wordpress
 
 Operands:
   <browser>  Brower you want to test on. Chrome and Firefox supported by default. See documenation if you want to add
              others.
 
 Options:
-  --type <arg>      The type of site you are testing. e.g --type WordPress
+  --type <arg>      The type of site you are testing. e.g --type wordpress
   --loglevel <arg>  Console loglevel - info, warn, error, debug.
   -?, --help        Show this help and quit.
 
