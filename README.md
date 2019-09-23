@@ -76,7 +76,7 @@ After this previous step you are in essence done. You can run the following comm
 
 If everything was configured properly you should see a browser window opened up to your site's home page (Example below). This window will close after about 10s .
 
-![example_login](http://wpselenium.devchid.com/images/example/login_chrome.png)
+![example_login](https://wpselenium.centridsol.tech/images/example/login_chrome.png)
 
 
 > Note:- 
