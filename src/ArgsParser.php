@@ -17,7 +17,7 @@ class ArgsParser{
                     ->setDescription("Brower you want to test on. Chrome and Firefox supported by default. See documenation if you want to add others."));
         $this->getOpt->addOptions([
             Option::create(null, 'type', GetOpt::MULTIPLE_ARGUMENT)
-                ->setDescription("The type of site you are testing. e.g --type WordPress"),
+                ->setDescription("The type of site you are testing. e.g --type wordpress"),
             Option::create(null, 'loglevel', GetOpt::MULTIPLE_ARGUMENT)
                 ->setDescription("Console loglevel - info, warn, error, debug."),
             Option::create('?', 'help', GetOpt::NO_ARGUMENT)
@@ -67,7 +67,7 @@ class WPSeleniumHelp extends Help {
                     $this->renderUsageOptions() . PHP_EOL ;
 
         $example =  $this->getText('example-text') .
-                    $this->getOpt->get(GetOpt::SETTING_SCRIPT_NAME) . ' chrome --wp' . PHP_EOL . PHP_EOL;
+                    $this->getOpt->get(GetOpt::SETTING_SCRIPT_NAME) . ' chrome --type wordpress' . PHP_EOL . PHP_EOL;
 
         return $usuage.$example;
     }

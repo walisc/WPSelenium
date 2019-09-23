@@ -8,18 +8,20 @@ WPSelenium also includes support for testing WordPress plugins and themes. It do
 **Usage**
 
 ```bash
+Operand browser is required
+
 Usage: vendor/bin/wpselenium <browser>  [options] 
-Example: vendor/bin/wpselenium chrome --wp
+Example: vendor/bin/wpselenium chrome --type WordPress
 
 Operands:
-  <browser>  Brower you want to test on. Chrome and Firefox supported by default. 
-             See documenation if you want to add others.
+  <browser>  Brower you want to test on. Chrome and Firefox supported by default. See documenation if you want to add
+             others.
 
 Options:
-  --wp              If you are testing a WordPress site. Adds extra features 
-                    for testing on WordPress.
+  --type <arg>      The type of site you are testing. e.g --type WordPress
   --loglevel <arg>  Console loglevel - info, warn, error, debug.
   -?, --help        Show this help and quit.
+
 
 ```
 
@@ -42,7 +44,7 @@ To get started with WPselenium install it using composer using the following com
 > **Note:-** This command assumes that the working directory you are running it from is a composer project. If not, you can easily make it one buy running
 `composer init` or adding a `composer.json` file.
 
-> **Note:-** WPSelnenium curently downloads the **74.0.3729.6 chrome drivers** and the **0.24 firefox gecko drivers**. If your browser needs a newer or older vesion of a driver (you will get error suggesting this if unsure) please specify an updated download url for the driver in the wpselenium.xml config file. Please see the [documentation site](http://wpselenium.devchid.com/) for more details.
+> **Note:-** WPSelnenium curently downloads the **76.0.3809.126 chrome drivers** and the **0.24 firefox gecko drivers**. If your browser needs a newer or older vesion of a driver (you will get error suggesting this if unsure) please specify an updated download url for the driver in the wpselenium.xml config file. Please see the [documentation site](http://wpselenium.devchid.com/) for more details.
 
  
 ### 2. Configure
@@ -65,7 +67,7 @@ Below if a very basic sample configuration to get you going.
 
 You will need to replace siteUrl, with you own site you are trying to test. 
 
-> Note:- The WPSelenium.xml can embed the phpunit config, using the phpunit endpoint (like above). This specified config is then loaded when testing your project with phpunit. However if you want to create your own phpunit config file (phpunit.xml) you can also do this (and not include it here). See [documentation site](http://wpselenium.devchid.com/) for more details.
+> Note:- The WPSelenium.xml can embed the phpunit config, using the phpunit endpoint (like above). This specified config is then loaded when testing your project with phpunit. However if you want to create your own phpunit config file (phpunit.xml) you can also do this (and not include it here). See [documentation site](https://wpselenium.centrid.tech/) for more details.
  
 ### 3. Run Tests
 After this previous step you are in essence done. You can run the following command from the same location as your `composer.json` file (were browser_driver can either be chrome or firefox)
@@ -79,7 +81,7 @@ If everything was configured properly you should see a browser window opened up 
 
 > Note:- 
 > 1. On first run WPSelenium will download the required files and configure those appropriately. This means your first run will take a little bit long to start testing your site.  
-> 2. WPSelenium currently comes with only support for chrome and firefox. However if there is another browser you want to test you can specify the link to the browser drivers in you wpselenium config. From there you can rerun the above command using the specified name of your driver (I.e  /vendor/bin/wpselenium –wp opera). See Configuration section for more details.
+> 2. WPSelenium currently comes with only support for chrome and firefox. However if there is another browser you want to test you can specify the link to the browser drivers in you wpselenium config. From there you can rerun the above command using the specified name of your driver (I.e  /vendor/bin/wpselenium opera). See Configuration section for more details.
 
 
 If you managed to see the home page of your site like the above example, everything is set up correct. You can now go ahead and write your tests.
@@ -87,12 +89,12 @@ If you managed to see the home page of your site like the above example, everyth
 
 ## WordPress Support
 
-WPSelenium comes with inbuilt support for WordPress sites. This is particularly useful when building custom plugins or themes that might require UI testing. Please see [documentation site](http://wpselenium.devchid.com/) for more details.
+WPSelenium comes with inbuilt support for WordPress sites. This is particularly useful when building custom plugins or themes that might require UI testing. Please see [documentation site](https://wpselenium.centridsol.tech/) for more details.
 
 
 ## Documentation
 
-The WPSelenium library is fully documented at [http://wpselenium.devchid.com/](http://wpselenium.devchid.com/). If you think of anything else that should be documented that's not there, please do give a shout. 
+The WPSelenium library is fully documented at [https://wpselenium.centridsol.tech/](https://wpselenium.centridsol.tech/). If you think of anything else that should be documented that's not there, please do give a shout. 
 
 ## Contributing
 
@@ -109,7 +111,7 @@ If it's a new feature, please add it as a issue with the label enhancement, deta
 
 ## Authors
 
-* **Chido Warambwa** - *Initial Work* - [devchid.com](http://devchid.com) 
+* **Chido Warambwa** - *Initial Work* - [chidow@centridsol.tech](mailto:chidow@centridsol.tech) 
   
 ## License
 
