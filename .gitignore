@@ -1,5 +1,6 @@
 Build/
-./idea
+.idea/
+temp/
 vendor/
 composer.lock
 .vscode

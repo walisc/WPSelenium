@@ -29,10 +29,10 @@ class Runner{
     {
         $optionsCommand = '';
         foreach ($options as $option => $value){
-            $optionsCommand .= sprintf("--%s %s", $option, $value);
+            $optionsCommand .= sprintf("--%s \"%s\"", $option, $value);
         }
 
-        system(sprintf("%s %s",$phpUnitPath, $optionsCommand ));
+        system(sprintf("\"%s\" %s",$phpUnitPath, $optionsCommand ));
     }
 
 }
