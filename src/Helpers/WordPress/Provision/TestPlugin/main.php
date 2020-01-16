@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: WPSelenium Test plugin
+Plugin Name: WPSelenium Test Plugin
 Description: Plugin used in conjunction with the wpselenium library to run Selenium tests on WordPress sites.
 Author: Centrid Software Solution
 Author URI: https://wpselenium.centridsol.tech/
