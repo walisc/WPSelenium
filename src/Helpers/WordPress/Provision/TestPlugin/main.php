@@ -3,8 +3,8 @@
 /*
 Plugin Name: WPSelenium Test plugin
 Description: Plugin used in conjunction with the wpselenium library to run Selenium tests on WordPress sites.
-Author: Chido Warambwa
-Author URI: http://devchid.com
+Author: Centrid Software Solution
+Author URI: https://wpselenium.centridsol.tech/
 */
 
 //Disallow someone accessing this file out the WordPress context
